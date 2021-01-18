@@ -14,6 +14,10 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import ua.pp.helperzit.excelparser.service.Table;
+import ua.pp.helperzit.excelparser.service.TableGenerator;
+import ua.pp.helperzit.excelparser.service.models.TableParsingCriteria;
+
 public class ExcelParser {
 
     public static void main(String[] args) throws IOException {
@@ -65,7 +69,19 @@ public class ExcelParser {
             }
         }
 
+        
+        TableParsingCriteria tableParsingCriteria = new TableParsingCriteria(0, 0, 0, 2, 2, false, false, -1);
+        
+        TableGenerator tableGenenerator = new TableGenerator();
+        String tbl  = "table";
+        Table table = tableGenenerator.parseFile(inXLSXFileLocation, tbl, tableParsingCriteria);
+        System.out.println(table);
+
     }
+    
+    
+    
+    
 
     private static String geStringValue(Cell cell) {
 
