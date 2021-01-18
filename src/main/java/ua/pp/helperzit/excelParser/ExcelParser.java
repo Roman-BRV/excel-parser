@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -13,6 +14,37 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelParser {
+    
+    private static String geStringValue(Cell cell) {
+        
+        String result;
+        
+        switch (cell.getCellType()) {
+        case STRING:
+            result = cell.getRichStringCellValue().getString();
+            break;
+        case NUMERIC:
+            if (DateUtil.isCellDateFormatted(cell)) {
+                result = cell.getDateCellValue().toString();
+            } else {
+                result = Double.toString(cell.getNumericCellValue());
+            }
+            break;
+        case BOOLEAN:
+            result = Boolean.toString(cell.getBooleanCellValue());
+            break;
+        case FORMULA:
+            result = cell.getCellFormula();
+            break;
+        case BLANK:
+            result = "";
+            break;
+        default:
+            result = "";
+    }
+        
+        return result;
+    }
     
     public static void main(String[] args) throws IOException {
         
@@ -36,12 +68,12 @@ public class ExcelParser {
             
             String parsingResult;
             try (Workbook inWorkbook = WorkbookFactory.create(new FileInputStream(inXLSXFileLocation))) {
-                parsingResult = inWorkbook.getSheetAt(0).getRow(0).getCell(0).getStringCellValue();
+                parsingResult = geStringValue(inWorkbook.getSheetAt(0).getRow(0).getCell(0));
             }
             System.out.println(parsingResult);
             
             try (Workbook inWorkbook = WorkbookFactory.create(new FileInputStream(inXLSFileLocation))) {
-                parsingResult = inWorkbook.getSheetAt(0).getRow(0).getCell(0).getStringCellValue();
+                parsingResult = geStringValue(inWorkbook.getSheetAt(0).getRow(0).getCell(0));
             }
             System.out.println(parsingResult);
 
