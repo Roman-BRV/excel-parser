@@ -82,7 +82,7 @@ public class ExcelParser {
         
         System.out.println("-------------------------------------------------------");
         ChatBot chatBot = new ChatBot();
-        chatBot.fileConversation();
+        chatBot.startConversation();
 
     }
     
