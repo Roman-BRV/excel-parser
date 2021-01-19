@@ -2,9 +2,11 @@ package ua.pp.helperzit.excelparser.ui.console;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Scanner;
 
 import ua.pp.helperzit.excelparser.ExcelParser;
+import ua.pp.helperzit.excelparser.service.FileFinder;
 import ua.pp.helperzit.excelparser.ui.UIException;
 
 public class ChatBot {
@@ -15,11 +17,44 @@ public class ChatBot {
     private static final String DELETE_STUDENT_BY_ID_COMMAND = "4";
     private static final String ADD_STUDENT_TO_COURSE_COMMAND = "5";
     private static final String REMOVE_STUDENT_FROM_COURSE_COMMAND = "6";
-    private static final String EXIT_COMMAND = "0";
+    private static final String EXIT_COMMAND = "1111";
     
-    private static final int EXIT_COMMAND_NUMBER = 0;
+    private static final int EXIT_COMMAND_NUMBER = 1111;
     
     private ExcelParser excelParser = new ExcelParser();
+    private FileFinder fileFinder = new FileFinder();
+    
+    public void fileConversation() throws UIException {
+        
+        String answer;
+        try (Scanner input = new Scanner(System.in);) {
+            do {
+                answer = input.nextLine();
+                if (fileFinder.checkDirPath(answer)) {
+                    System.out.println("DIR");
+                    List<String> fileNames = fileFinder.getFileNames(answer);
+                    for (String fileName : fileNames) {
+                        System.out.println(fileName);
+                    }
+                    //printLowOccupancyGroups(input);
+
+                } else if (fileFinder.checkFilePath(answer)) {
+                    System.out.println("FILE");
+                    //printStudentsByCourseName(input);
+
+                } else if(answer.equals(EXIT_COMMAND)) {
+                    System.out.println("Goodbay! Have a nice day!");
+                    
+                } else {
+                    System.out.println("Please enter correct path.");
+                    
+                }
+            } while (!answer.equals(EXIT_COMMAND));
+        } catch (Exception e) {
+            throw new UIException("Problems in UI layer");
+        }
+        
+    }
     
     public void startConversation() throws UIException {
 

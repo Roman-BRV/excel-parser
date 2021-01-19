@@ -18,10 +18,12 @@ import ua.pp.helperzit.excelparser.service.ServiceException;
 import ua.pp.helperzit.excelparser.service.TableGenerator;
 import ua.pp.helperzit.excelparser.service.models.Table;
 import ua.pp.helperzit.excelparser.service.models.TableParsingCriteria;
+import ua.pp.helperzit.excelparser.ui.UIException;
+import ua.pp.helperzit.excelparser.ui.console.ChatBot;
 
 public class ExcelParser {
 
-    public static void main(String[] args) throws IOException, ServiceException {
+    public static void main(String[] args) throws IOException, ServiceException, UIException {
 
         File currentDir = new File(".");
         String path = currentDir.getAbsolutePath();
@@ -77,6 +79,10 @@ public class ExcelParser {
         String tbl  = "table";
         Table table = tableGenenerator.parseFile(inXLSXFileLocation, tbl, tableParsingCriteria);
         System.out.println(table);
+        
+        System.out.println("-------------------------------------------------------");
+        ChatBot chatBot = new ChatBot();
+        chatBot.fileConversation();
 
     }
     
