@@ -14,11 +14,12 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellReference;
 
+import ua.pp.helperzit.excelparser.service.models.Table;
 import ua.pp.helperzit.excelparser.service.models.TableParsingCriteria;
 
 public class TableGenerator {
 
-    public Table parseFile(String filePath, String tableName, TableParsingCriteria tableParsingCriteria) {
+    public Table parseFile(String filePath, String tableName, TableParsingCriteria tableParsingCriteria) throws ServiceException {
 
         Table table = new Table();
 
@@ -45,11 +46,15 @@ public class TableGenerator {
                 }
             } else {
                 Row row = sheet.getRow(startRowNumber);
-                for (int columnIndex = startColunmNumber; columnIndex <= endColunmNumber; columnIndex++) {
-                    Cell cell = row.getCell(columnIndex);
-                    heads.add(geStringValue(cell));
-                    startRowNumber++;
+                if(row == null) {
+                    throw new ServiceException("Excel row nubber: " + (sheetNumber + 1) + " is empty. Heads row cannot be empty!");
                 }
+                
+                for (int columnIndex = startColunmNumber; columnIndex <= endColunmNumber; columnIndex++) {
+                    Cell cell = row.getCell(columnIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                    heads.add(geStringValue(cell));
+                }
+                startRowNumber++;
             }
 
             int tmpRowIndex = 0;
@@ -58,13 +63,20 @@ public class TableGenerator {
                 if(!hasKeys) {
                     keys.add("At row - " + (rowIndex + 1));
                 }
-
+                
                 Row row = sheet.getRow(rowIndex);
+                if(row == null) {
+                    if(hasKeys) {
+                        keys.add("All row - " + (rowIndex + 1) + " empty.");
+                    }
+                    continue;
+                }
+                
                 int tmpCellIndex = 0;
 
                 for (int columnIndex = startColunmNumber; columnIndex <= endColunmNumber; columnIndex++) {
 
-                    Cell cell = row.getCell(columnIndex);
+                    Cell cell = row.getCell(columnIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                     tableData[tmpRowIndex][tmpCellIndex] = geStringValue(cell);
                     if(columnIndex == keyColunmNumber) {
                         keys.add(geStringValue(cell));
@@ -81,14 +93,11 @@ public class TableGenerator {
             table.setTableParsingCriteria(tableParsingCriteria);
 
         } catch (EncryptedDocumentException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new ServiceException("Something went wrong whit parsing Excel file - " + filePath, e);
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new ServiceException("Excel file - " + filePath + " not founded.", e);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new ServiceException("Something went wrong whit reading Excel file - " + filePath, e);
         }
 
         table.setTableData(tableData);

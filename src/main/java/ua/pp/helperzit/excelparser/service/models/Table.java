@@ -1,15 +1,11 @@
-package ua.pp.helperzit.excelparser.service;
+package ua.pp.helperzit.excelparser.service.models;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-//import java.util.HashMap;
-//import java.util.Map;
-
-import ua.pp.helperzit.excelparser.service.models.TableParsingCriteria;
 
 public class Table {
-
+    
     private String filePath;
     private String tableName;
     private TableParsingCriteria tableParsingCriteria;
@@ -23,18 +19,9 @@ public class Table {
         this.filePath = "";
         this.tableName = "";
         this.tableParsingCriteria = new TableParsingCriteria();
-        this.heads = new ArrayList<String>();
-        this.keys = new ArrayList<String>();
-        //this.tableData = new HashMap<>();
+        this.heads = new ArrayList<>();
+        this.keys = new ArrayList<>();
     }
-    
-//  public Table(String filePath, String tableName, TableParsingCriteria tableParsingCriteria) {
-//
-//      this.filePath = filePath;
-//      this.tableName = tableName;
-//      this.tableParsingCriteria = tableParsingCriteria;
-//      this.tableData = new HashMap<>();
-//  }
 
     public String getFilePath() {
         return filePath;
@@ -84,11 +71,14 @@ public class Table {
         this.tableData = tableData;
     }
 
+    private static final String NEW_LINE_TAB = ",\n\t";
+
     @Override
     public String toString() {
-        return "Table [filePath=" + filePath + ", tableName=" + tableName + ", tableParsingCriteria="
-                + tableParsingCriteria + ", heads=" + heads + ", keys=" + keys + ", tableData="
-                + Arrays.toString(tableData) + "]";
+        return "Table [filePath=" + filePath + ", tableName=" + tableName 
+                + NEW_LINE_TAB + "tableParsingCriteria=" + tableParsingCriteria
+                + NEW_LINE_TAB + "heads=" + heads + NEW_LINE_TAB + "keys=" + keys 
+                + NEW_LINE_TAB + "tableData=" + Arrays.deepToString(tableData) + "]";
     }
 
     @Override

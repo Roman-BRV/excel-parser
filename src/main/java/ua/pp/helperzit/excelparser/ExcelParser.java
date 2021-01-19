@@ -14,13 +14,14 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import ua.pp.helperzit.excelparser.service.Table;
+import ua.pp.helperzit.excelparser.service.ServiceException;
 import ua.pp.helperzit.excelparser.service.TableGenerator;
+import ua.pp.helperzit.excelparser.service.models.Table;
 import ua.pp.helperzit.excelparser.service.models.TableParsingCriteria;
 
 public class ExcelParser {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ServiceException {
 
         File currentDir = new File(".");
         String path = currentDir.getAbsolutePath();
