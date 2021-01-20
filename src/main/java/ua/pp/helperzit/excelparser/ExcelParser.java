@@ -19,7 +19,7 @@ import ua.pp.helperzit.excelparser.service.TableGenerator;
 import ua.pp.helperzit.excelparser.service.models.Table;
 import ua.pp.helperzit.excelparser.service.models.TableParsingCriteria;
 import ua.pp.helperzit.excelparser.ui.UIException;
-import ua.pp.helperzit.excelparser.ui.console.ChatBot;
+import ua.pp.helperzit.excelparser.ui.console.ParsingCriteriaConversation;
 
 public class ExcelParser {
 
@@ -27,9 +27,8 @@ public class ExcelParser {
 
         File currentDir = new File(".");
         String path = currentDir.getAbsolutePath();
-        String outFileLocation = path.substring(0, path.length()-1) + "tempWrite.xlsx";
-        String inXLSXFileLocation = path.substring(0, path.length()-1) + "tempRead.xlsx";
-        String inXLSFileLocation = path.substring(0, path.length()-1) + "tempRead.xls";
+        String fileXLSXPath = path.substring(0, path.length()-1) + "temp.xlsx";
+//        String inXLSFileLocation = path.substring(0, path.length()-1) + "tempRead.xls";
 
         try (Workbook outWorkbook = new XSSFWorkbook()) {
             Sheet sheet = outWorkbook.createSheet("sheet1");
@@ -37,15 +36,21 @@ public class ExcelParser {
             Cell cell0 = row0.createCell(0);
 
             cell0.setCellValue("setted text");
+            
+            Row row2 = sheet.createRow(2);
+            for (int i = 0; i < 5; i++) {
+                Cell cell = row2.createCell(i);
+                cell.setCellValue(i+1);
+            }
 
-            FileOutputStream fos = new FileOutputStream(outFileLocation);
+            FileOutputStream fos = new FileOutputStream(fileXLSXPath);
             outWorkbook.write(fos);
             fos.close();
         }
 
         String parsingResult;
         CellReference cellRef;
-        try (Workbook inWorkbook = WorkbookFactory.create(new FileInputStream(inXLSXFileLocation))) {
+        try (Workbook inWorkbook = WorkbookFactory.create(new FileInputStream(fileXLSXPath))) {
 
             for (Sheet sheet : inWorkbook) {
                 for (Row row : sheet) {
@@ -59,34 +64,39 @@ public class ExcelParser {
         }
 
 
-        try (Workbook inWorkbook = WorkbookFactory.create(new FileInputStream(inXLSFileLocation))) {
-
-            for (Sheet sheet : inWorkbook) {
-                for (Row row : sheet) {
-                    for (Cell cell : row) {
-                        parsingResult = geStringValue(cell);
-                        cellRef = new CellReference(row.getRowNum(), cell.getColumnIndex());
-                        System.out.println(cellRef.formatAsString(true) + " - " + parsingResult);
-                    }
-                }
-            }
-        }
+//        try (Workbook inWorkbook = WorkbookFactory.create(new FileInputStream(inXLSFileLocation))) {
+//
+//            for (Sheet sheet : inWorkbook) {
+//                for (Row row : sheet) {
+//                    for (Cell cell : row) {
+//                        parsingResult = geStringValue(cell);
+//                        cellRef = new CellReference(row.getRowNum(), cell.getColumnIndex());
+//                        System.out.println(cellRef.formatAsString(true) + " - " + parsingResult);
+//                    }
+//                }
+//            }
+//        }
 
         
-        TableParsingCriteria tableParsingCriteria = new TableParsingCriteria(0, 0, 0, 2, 2, false, false, -1);
+        TableParsingCriteria hardCodeCriteria = new TableParsingCriteria(0, 0, 0, 2, 2, false, false, -1);
         
         TableGenerator tableGenenerator = new TableGenerator();
         String tbl  = "table";
-        Table table = tableGenenerator.parseFile(inXLSXFileLocation, tbl, tableParsingCriteria);
-        System.out.println(table);
+        Table hardCodeTable = tableGenenerator.parseFile(fileXLSXPath, tbl, hardCodeCriteria);
+        System.out.println(hardCodeTable);
         
         System.out.println("-------------------------------------------------------");
-        ChatBot chatBot = new ChatBot();
-        chatBot.startConversation();
+        
+        ParsingCriteriaConversation parsingCriteriaConversation = new ParsingCriteriaConversation();
+        parsingCriteriaConversation.startConversation();
+        TableParsingCriteria criteria = parsingCriteriaConversation.getTableParsingCriteria();
+        String filePath = parsingCriteriaConversation.getFilePath();
+        String tableName = parsingCriteriaConversation.getTableName();
+        Table table = tableGenenerator.parseFile(filePath, tableName, criteria);
+        System.out.println(table);
+        System.out.println("TableUI equals HardCodeTable - " + table.equals(hardCodeTable));
 
     }
-    
-    
     
     
 

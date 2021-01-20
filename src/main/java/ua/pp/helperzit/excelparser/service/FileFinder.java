@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FileFinder {
     
@@ -40,9 +41,11 @@ public class FileFinder {
                 fileNames.add(file.getName());
             }
         }
+        dirsFilesNames.addAll(dirNames.stream().sorted().collect(Collectors.toList()));
+        dirsFilesNames.addAll(fileNames.stream().sorted().collect(Collectors.toList()));
 
         
-        return fileNames;
+        return dirsFilesNames;
     }
 
 }
