@@ -14,7 +14,7 @@ public class ParsingCriteriaConversation {
     private static final String ANSWER_IF_TRUE = "1";
     private static final String ANSWER_IF_FALSE = "0";
 
-    private static final int UNEXIST_KEY_COLUMN_NUMBER = -1;
+    private static final String UNEXIST_KEY_COLUMN_NAME = "default";
 
     private static final String EXIT_COMMAND = "EXIT!";
 
@@ -41,13 +41,14 @@ public class ParsingCriteriaConversation {
 
         System.out.println("Hello I`m chatbot Marichka. Welcome at Excel Parser!");
         printAppDescription();
+        System.out.println("Enter path to file:");
 
         String answer;
         try (Scanner input = new Scanner(System.in);) {
             do {
                 answer = input.nextLine();
                 if (fileFinder.checkDirPath(answer)) {
-                    System.out.println("DIR");
+                    System.out.println("It is directory. Includes:");
                     List<String> fileNames = fileFinder.getFileNames(answer);
                     for (String fileName : fileNames) {
                         System.out.println(fileName);
@@ -57,7 +58,7 @@ public class ParsingCriteriaConversation {
                     System.out.println("File path correct - " + answer);
                     filePath = answer;
 
-                    System.out.println("Enter name for parsing table. For example: deals_30-02-00.");
+                    System.out.println("Enter name for parsing table. For example: deals_30-02-00:");
                     tableName = input.nextLine();
 
                     tableParsingCriteria = constructTableParsingCriteria(input);
@@ -84,17 +85,17 @@ public class ParsingCriteriaConversation {
 
         TableParsingCriteria criteria = new TableParsingCriteria();
 
-        System.out.println("Enter number of excel sheet (1 - first).");
+        System.out.println("Enter number of excel sheet (1 - first):");
         criteria.setSheetNumber(askForNumber(input) - 1);
 
-        System.out.println("Enter name of start excel column (A - XFD for xlsx or A - IV for xls).");
-        criteria.setStartColunmNumber(askForNumber(input) - 1);
-        System.out.println("Enter number of start excel row (1 - 1048576 for xlsx or 1 - 65536 for xls).");
+        System.out.println("Enter name of start excel column (A - XFD for xlsx or A - IV for xls):");
+        criteria.setStartColunmName(askForColumnName(input));
+        System.out.println("Enter number of start excel row (1 - 1048576 for xlsx or 1 - 65536 for xls):");
         criteria.setStartRowNumber(askForNumber(input) - 1);
 
-        System.out.println("Enter name of end excel column (A - XFD for xlsx or A - IV for xls).");
-        criteria.setEndColunmNumber(askForNumber(input) - 1);
-        System.out.println("Enter number of end excel row (1 - 1048576 for xlsx or 1 - 65536 for xls).");
+        System.out.println("Enter name of end excel column (A - XFD for xlsx or A - IV for xls):");
+        criteria.setEndColunmName(askForColumnName(input));
+        System.out.println("Enter number of end excel row (1 - 1048576 for xlsx or 1 - 65536 for xls):");
         criteria.setEndRowNumber(askForNumber(input) - 1);
 
         System.out.println("First parsing row has HEADs?");
@@ -102,10 +103,10 @@ public class ParsingCriteriaConversation {
         System.out.println("Do you need in KEYs?");
         criteria.setHasKeys(askForBoolean(input));
         if(!criteria.isHasKeys()) {
-            criteria.setKeyColunmNumber(UNEXIST_KEY_COLUMN_NUMBER);
+            criteria.setKeyColunmName(UNEXIST_KEY_COLUMN_NAME);
         }else {
             System.out.println("Enter name of KEY excel column (ONLY between name of start excel column and name of end excel column).");
-            criteria.setKeyColunmNumber(askForNumber(input) - 1);
+            criteria.setKeyColunmName(askForColumnName(input));
         }
 
         return criteria;
@@ -129,7 +130,7 @@ public class ParsingCriteriaConversation {
 
             } else {
                 System.out.println("You entered unexprcted answer.");
-                System.out.println("Try once more.");
+                System.out.println("Try once more:");
 
             }
         } while (!isEndOfQuery);
@@ -155,7 +156,7 @@ public class ParsingCriteriaConversation {
 
             } else {
                 System.out.println("You entered unexprcted answer.");
-                System.out.println("Try once more.");
+                System.out.println("Try once more:");
 
             }
         } while (!isEndOfQuery);
@@ -170,7 +171,7 @@ public class ParsingCriteriaConversation {
         String answer;
         boolean booleanAnswer = false;
 
-        System.out.println("Enter 1 if YES or 0 if NO.");
+        System.out.println("Enter 1 if YES or 0 if NO:");
         do {
             answer = input.nextLine();
             if ((answer.equals(ANSWER_IF_TRUE)||answer.equals(ANSWER_IF_FALSE)) && !answer.equals(EXIT_COMMAND)) {
@@ -185,7 +186,7 @@ public class ParsingCriteriaConversation {
 
             } else {
                 System.out.println("You entered unexprcted answer.");
-                System.out.println("Try once more.");
+                System.out.println("Try once more:");
 
             }
         } while (!isEndOfQuery);

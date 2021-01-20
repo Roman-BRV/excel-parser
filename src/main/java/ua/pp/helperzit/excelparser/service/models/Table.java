@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Table {
-    
+
     private String filePath;
     private String tableName;
     private TableParsingCriteria tableParsingCriteria;

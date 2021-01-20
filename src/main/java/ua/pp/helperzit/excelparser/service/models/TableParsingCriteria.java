@@ -1,121 +1,121 @@
 package ua.pp.helperzit.excelparser.service.models;
 
 public class TableParsingCriteria {
-    
-    private static final int UNEXIST_KEY_COLUMN_NUMBER = -1;
+
+    private static final String UNEXIST_KEY_COLUMN_NAME = "default";
 
     private int sheetNumber;
     private int startRowNumber;
-    private int startColunmNumber;
+    private String startColunmName;
     private int endRowNumber;
-    private int endColunmNumber;
+    private String endColunmName;
     private boolean hasHeads;
     private boolean hasKeys;
-    private int keyColunmNumber;
+    private String keyColunmName;
 
     public TableParsingCriteria() {
-        
+
         if(!hasKeys) {
-            this.keyColunmNumber = UNEXIST_KEY_COLUMN_NUMBER;
+            this.keyColunmName = UNEXIST_KEY_COLUMN_NAME;
         }
 
     }
 
-    public TableParsingCriteria(int sheetNumber, int startRowNumber, int startColunmNumber, int endRowNumber, int endColunmNumber, boolean hasHeads, boolean hasKeys, int keyColunmNumber) {
+    public TableParsingCriteria(int sheetNumber, int startRowNumber, String startColunmName, int endRowNumber, String endColunmName, boolean hasHeads, boolean hasKeys, String keyColunmName) {
 
         this.sheetNumber = sheetNumber;
         this.startRowNumber = startRowNumber;
-        this.startColunmNumber = startColunmNumber;
+        this.startColunmName = startColunmName;
         this.endRowNumber = endRowNumber;
-        this.endColunmNumber = endColunmNumber;
+        this.endColunmName = endColunmName;
         this.hasHeads = hasHeads;
         this.hasKeys = hasKeys;
-        this.keyColunmNumber = keyColunmNumber;
+        this.keyColunmName = keyColunmName;
     }
 
     public int getSheetNumber() {
         return sheetNumber;
     }
 
-    public void setSheetNumber(int sheetNumber) {
-        this.sheetNumber = sheetNumber;
-    }
-
     public int getStartRowNumber() {
         return startRowNumber;
     }
 
-    public void setStartRowNumber(int startRowNumber) {
-        this.startRowNumber = startRowNumber;
-    }
-
-    public int getStartColunmNumber() {
-        return startColunmNumber;
-    }
-
-    public void setStartColunmNumber(int startColunmNumber) {
-        this.startColunmNumber = startColunmNumber;
+    public String getStartColunmName() {
+        return startColunmName;
     }
 
     public int getEndRowNumber() {
         return endRowNumber;
     }
 
-    public void setEndRowNumber(int endRowNumber) {
-        this.endRowNumber = endRowNumber;
-    }
-
-    public int getEndColunmNumber() {
-        return endColunmNumber;
-    }
-
-    public void setEndColunmNumber(int endColunmNumber) {
-        this.endColunmNumber = endColunmNumber;
+    public String getEndColunmName() {
+        return endColunmName;
     }
 
     public boolean isHasHeads() {
         return hasHeads;
     }
 
-    public void setHasHeads(boolean hasHead) {
-        this.hasHeads = hasHead;
-    }
-
     public boolean isHasKeys() {
         return hasKeys;
     }
 
-    public void setHasKeys(boolean hasKey) {
-        this.hasKeys = hasKey;
+    public String getKeyColunmName() {
+        return keyColunmName;
     }
 
-    public int getKeyColunmNumber() {
-        return keyColunmNumber;
+    public void setSheetNumber(int sheetNumber) {
+        this.sheetNumber = sheetNumber;
     }
 
-    public void setKeyColunmNumber(int keyColunmNumber) {
-        this.keyColunmNumber = keyColunmNumber;
+    public void setStartRowNumber(int startRowNumber) {
+        this.startRowNumber = startRowNumber;
+    }
+
+    public void setStartColunmName(String startColunmName) {
+        this.startColunmName = startColunmName;
+    }
+
+    public void setEndRowNumber(int endRowNumber) {
+        this.endRowNumber = endRowNumber;
+    }
+
+    public void setEndColunmName(String endColunmName) {
+        this.endColunmName = endColunmName;
+    }
+
+    public void setHasHeads(boolean hasHeads) {
+        this.hasHeads = hasHeads;
+    }
+
+    public void setHasKeys(boolean hasKeys) {
+        this.hasKeys = hasKeys;
+    }
+
+    public void setKeyColunmName(String keyColunmName) {
+        this.keyColunmName = keyColunmName;
     }
 
     @Override
     public String toString() {
-        return "TableParserCriteria [sheetNumber=" + sheetNumber + ", startRowNumber=" + startRowNumber
-                + ", startColunmNumber=" + startColunmNumber + ", endRowNumber=" + endRowNumber + ", endColunmNumber="
-                + endColunmNumber + ", hasHead=" + hasHeads + ", hasKey=" + hasKeys + ", keyColunmNumber="
-                + keyColunmNumber + "]";
+        return "TableParsingCriteria [sheetNumber=" + sheetNumber + ", startRowNumber=" + startRowNumber
+                + ", startColunmName=" + startColunmName + ", endRowNumber=" + endRowNumber + ", endColunmName="
+                + endColunmName + ", hasHeads=" + hasHeads + ", hasKeys=" + hasKeys + ", keyColunmName=" + keyColunmName
+                + "]";
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + endColunmNumber;
+        result = prime * result + ((endColunmName == null) ? 0 : endColunmName.hashCode());
         result = prime * result + endRowNumber;
         result = prime * result + (hasHeads ? 1231 : 1237);
         result = prime * result + (hasKeys ? 1231 : 1237);
-        result = prime * result + keyColunmNumber;
+        result = prime * result + ((keyColunmName == null) ? 0 : keyColunmName.hashCode());
         result = prime * result + sheetNumber;
-        result = prime * result + startColunmNumber;
+        result = prime * result + ((startColunmName == null) ? 0 : startColunmName.hashCode());
         result = prime * result + startRowNumber;
         return result;
     }
@@ -129,7 +129,10 @@ public class TableParsingCriteria {
         if (getClass() != obj.getClass())
             return false;
         TableParsingCriteria other = (TableParsingCriteria) obj;
-        if (endColunmNumber != other.endColunmNumber)
+        if (endColunmName == null) {
+            if (other.endColunmName != null)
+                return false;
+        } else if (!endColunmName.equals(other.endColunmName))
             return false;
         if (endRowNumber != other.endRowNumber)
             return false;
@@ -137,11 +140,17 @@ public class TableParsingCriteria {
             return false;
         if (hasKeys != other.hasKeys)
             return false;
-        if (keyColunmNumber != other.keyColunmNumber)
+        if (keyColunmName == null) {
+            if (other.keyColunmName != null)
+                return false;
+        } else if (!keyColunmName.equals(other.keyColunmName))
             return false;
         if (sheetNumber != other.sheetNumber)
             return false;
-        if (startColunmNumber != other.startColunmNumber)
+        if (startColunmName == null) {
+            if (other.startColunmName != null)
+                return false;
+        } else if (!startColunmName.equals(other.startColunmName))
             return false;
         if (startRowNumber != other.startRowNumber)
             return false;

@@ -28,13 +28,13 @@ public class TableGenerator {
 
         int sheetNumber = tableParsingCriteria.getSheetNumber();
         int startRowNumber = tableParsingCriteria.getStartRowNumber();
-        int startColunmNumber = tableParsingCriteria.getStartColunmNumber();
+        int startColunmNumber = CellReference.convertColStringToIndex(tableParsingCriteria.getStartColunmName());
         int endRowNumber = tableParsingCriteria.getEndRowNumber();
-        int endColunmNumber = tableParsingCriteria.getEndColunmNumber();
+        int endColunmNumber = CellReference.convertColStringToIndex(tableParsingCriteria.getEndColunmName());
         boolean hasHeads = tableParsingCriteria.isHasHeads();
         boolean hasKeys = tableParsingCriteria.isHasKeys();
-        int keyColunmNumber = tableParsingCriteria.getKeyColunmNumber();
-        
+        int keyColunmNumber = CellReference.convertColStringToIndex(tableParsingCriteria.getKeyColunmName());
+
         String[][] tableData = new String[endRowNumber - startRowNumber + 1][endColunmNumber - startColunmNumber + 1];
 
         try (Workbook workbook = WorkbookFactory.create(new FileInputStream(filePath))) {
@@ -49,7 +49,7 @@ public class TableGenerator {
                 if(row == null) {
                     throw new ServiceException("Excel row nubber: " + (sheetNumber + 1) + " is empty. Heads row cannot be empty!");
                 }
-                
+
                 for (int columnIndex = startColunmNumber; columnIndex <= endColunmNumber; columnIndex++) {
                     Cell cell = row.getCell(columnIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                     heads.add(geStringValue(cell));
@@ -63,7 +63,7 @@ public class TableGenerator {
                 if(!hasKeys) {
                     keys.add("At row - " + (rowIndex + 1));
                 }
-                
+
                 Row row = sheet.getRow(rowIndex);
                 if(row == null) {
                     if(hasKeys) {
@@ -71,7 +71,7 @@ public class TableGenerator {
                     }
                     continue;
                 }
-                
+
                 int tmpCellIndex = 0;
 
                 for (int columnIndex = startColunmNumber; columnIndex <= endColunmNumber; columnIndex++) {
@@ -101,7 +101,7 @@ public class TableGenerator {
         }
 
         table.setTableData(tableData);
-        
+
         return table;
 
     }

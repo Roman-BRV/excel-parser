@@ -28,7 +28,7 @@ public class ExcelParser {
         File currentDir = new File(".");
         String path = currentDir.getAbsolutePath();
         String fileXLSXPath = path.substring(0, path.length()-1) + "temp.xlsx";
-//        String inXLSFileLocation = path.substring(0, path.length()-1) + "tempRead.xls";
+        //        String inXLSFileLocation = path.substring(0, path.length()-1) + "tempRead.xls";
 
         try (Workbook outWorkbook = new XSSFWorkbook()) {
             Sheet sheet = outWorkbook.createSheet("sheet1");
@@ -36,7 +36,7 @@ public class ExcelParser {
             Cell cell0 = row0.createCell(0);
 
             cell0.setCellValue("setted text");
-            
+
             Row row2 = sheet.createRow(2);
             for (int i = 0; i < 5; i++) {
                 Cell cell = row2.createCell(i);
@@ -64,29 +64,29 @@ public class ExcelParser {
         }
 
 
-//        try (Workbook inWorkbook = WorkbookFactory.create(new FileInputStream(inXLSFileLocation))) {
-//
-//            for (Sheet sheet : inWorkbook) {
-//                for (Row row : sheet) {
-//                    for (Cell cell : row) {
-//                        parsingResult = geStringValue(cell);
-//                        cellRef = new CellReference(row.getRowNum(), cell.getColumnIndex());
-//                        System.out.println(cellRef.formatAsString(true) + " - " + parsingResult);
-//                    }
-//                }
-//            }
-//        }
+        //        try (Workbook inWorkbook = WorkbookFactory.create(new FileInputStream(inXLSFileLocation))) {
+        //
+        //            for (Sheet sheet : inWorkbook) {
+        //                for (Row row : sheet) {
+        //                    for (Cell cell : row) {
+        //                        parsingResult = geStringValue(cell);
+        //                        cellRef = new CellReference(row.getRowNum(), cell.getColumnIndex());
+        //                        System.out.println(cellRef.formatAsString(true) + " - " + parsingResult);
+        //                    }
+        //                }
+        //            }
+        //        }
 
-        
-        TableParsingCriteria hardCodeCriteria = new TableParsingCriteria(0, 0, 0, 2, 2, false, false, -1);
-        
+
+        TableParsingCriteria hardCodeCriteria = new TableParsingCriteria(0, 0, "A", 2, "C", false, false, "default");
+
         TableGenerator tableGenenerator = new TableGenerator();
         String tbl  = "table";
         Table hardCodeTable = tableGenenerator.parseFile(fileXLSXPath, tbl, hardCodeCriteria);
         System.out.println(hardCodeTable);
-        
+
         System.out.println("-------------------------------------------------------");
-        
+
         ParsingCriteriaConversation parsingCriteriaConversation = new ParsingCriteriaConversation();
         parsingCriteriaConversation.startConversation();
         TableParsingCriteria criteria = parsingCriteriaConversation.getTableParsingCriteria();
@@ -97,8 +97,8 @@ public class ExcelParser {
         System.out.println("TableUI equals HardCodeTable - " + table.equals(hardCodeTable));
 
     }
-    
-    
+
+
 
     private static String geStringValue(Cell cell) {
 
