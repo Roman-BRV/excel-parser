@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import ua.pp.helperzit.excelparser.service.FileFinder;
+import ua.pp.helperzit.excelparser.service.models.TableDescription;
 import ua.pp.helperzit.excelparser.service.models.TableParsingCriteria;
 import ua.pp.helperzit.excelparser.ui.UIException;
 
@@ -19,26 +20,28 @@ public class ParsingCriteriaConversation {
     private static final String EXIT_COMMAND = "EXIT!";
 
     private FileFinder fileFinder = new FileFinder();
-    private TableParsingCriteria tableParsingCriteria;
-    private String filePath;
-    private String tableName;
+    //private TableParsingCriteria tableParsingCriteria;
+    //private String filePath;
+    //private String tableName;
 
 
 
-    public TableParsingCriteria getTableParsingCriteria() {
-        return tableParsingCriteria;
-    }
+//    public TableParsingCriteria getTableParsingCriteria() {
+//        return tableParsingCriteria;
+//    }
 
-    public String getFilePath() {
-        return filePath;
-    }
+//    public String getFilePath() {
+//        return filePath;
+//    }
+//
+//    public String getTableName() {
+//        return tableName;
+//    }
 
-    public String getTableName() {
-        return tableName;
-    }
+    public TableDescription startConversation() throws UIException {
 
-    public void startConversation() throws UIException {
-
+        TableDescription tableDescription = new TableDescription();
+        
         System.out.println("Hello I`m chatbot Marichka. Welcome at Excel Parser!");
         printAppDescription();
         System.out.println("Enter path to file:");
@@ -56,12 +59,15 @@ public class ParsingCriteriaConversation {
 
                 } else if (fileFinder.checkFilePath(answer)) {
                     System.out.println("File path correct - " + answer);
-                    filePath = answer;
+                    String filePath = answer;
+                    tableDescription.setFilePath(filePath);
 
                     System.out.println("Enter name for parsing table. For example: deals_30-02-00:");
-                    tableName = input.nextLine();
+                    String tableName = input.nextLine();
+                    tableDescription.setTableName(tableName);
 
-                    tableParsingCriteria = constructTableParsingCriteria(input);
+                    TableParsingCriteria tableParsingCriteria = constructTableParsingCriteria(input);
+                    tableDescription.setTableParsingCriteria(tableParsingCriteria);
                     System.out.println(filePath);
                     System.out.println(tableName);
                     System.out.println(tableParsingCriteria);
@@ -75,9 +81,12 @@ public class ParsingCriteriaConversation {
 
                 }
             } while (!answer.equals(EXIT_COMMAND));
+            
         } catch (Exception e) {
             throw new UIException("Problems in UI layer");
         }
+        
+        return tableDescription;
 
     }
 

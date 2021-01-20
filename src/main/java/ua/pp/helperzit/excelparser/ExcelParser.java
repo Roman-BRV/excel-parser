@@ -17,6 +17,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import ua.pp.helperzit.excelparser.service.ServiceException;
 import ua.pp.helperzit.excelparser.service.TableGenerator;
 import ua.pp.helperzit.excelparser.service.models.Table;
+import ua.pp.helperzit.excelparser.service.models.TableDescription;
 import ua.pp.helperzit.excelparser.service.models.TableParsingCriteria;
 import ua.pp.helperzit.excelparser.ui.UIException;
 import ua.pp.helperzit.excelparser.ui.console.ParsingCriteriaConversation;
@@ -88,10 +89,12 @@ public class ExcelParser {
         System.out.println("-------------------------------------------------------");
 
         ParsingCriteriaConversation parsingCriteriaConversation = new ParsingCriteriaConversation();
-        parsingCriteriaConversation.startConversation();
-        TableParsingCriteria criteria = parsingCriteriaConversation.getTableParsingCriteria();
-        String filePath = parsingCriteriaConversation.getFilePath();
-        String tableName = parsingCriteriaConversation.getTableName();
+        //parsingCriteriaConversation.startConversation();
+        
+        TableDescription tableDescription = parsingCriteriaConversation.startConversation();
+        String filePath = tableDescription.getFilePath();
+        String tableName = tableDescription.getTableName();
+        TableParsingCriteria criteria = tableDescription.getTableParsingCriteria();
         Table table = tableGenenerator.parseFile(filePath, tableName, criteria);
         System.out.println(table);
         System.out.println("TableUI equals HardCodeTable - " + table.equals(hardCodeTable));
