@@ -3,12 +3,12 @@ package ua.pp.helperzit.excelparser.ui.console;
 import java.util.List;
 import java.util.Scanner;
 
-import ua.pp.helperzit.excelparser.service.FileFinder;
 import ua.pp.helperzit.excelparser.service.models.TableDescription;
 import ua.pp.helperzit.excelparser.service.models.TableParsingCriteria;
+import ua.pp.helperzit.excelparser.ui.FileFinder;
 import ua.pp.helperzit.excelparser.ui.UIException;
 
-public class ParsingCriteriaConversation {
+public class TableDescriptionConversation {
 
     private static final String EXCEL_COLUMN_NAME_PATTERN = "^[A-Z]{1,3}";
 
@@ -19,27 +19,9 @@ public class ParsingCriteriaConversation {
 
     private static final String EXIT_COMMAND = "EXIT!";
 
-    private FileFinder fileFinder = new FileFinder();
-    //private TableParsingCriteria tableParsingCriteria;
-    //private String filePath;
-    //private String tableName;
+    public TableDescription askTableDescription() throws UIException {
 
-
-
-//    public TableParsingCriteria getTableParsingCriteria() {
-//        return tableParsingCriteria;
-//    }
-
-//    public String getFilePath() {
-//        return filePath;
-//    }
-//
-//    public String getTableName() {
-//        return tableName;
-//    }
-
-    public TableDescription startConversation() throws UIException {
-
+        FileFinder fileFinder = new FileFinder();
         TableDescription tableDescription = new TableDescription();
         
         System.out.println("Hello I`m chatbot Marichka. Welcome at Excel Parser!");

@@ -15,16 +15,20 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellReference;
 
 import ua.pp.helperzit.excelparser.service.models.Table;
+import ua.pp.helperzit.excelparser.service.models.TableDescription;
 import ua.pp.helperzit.excelparser.service.models.TableParsingCriteria;
+import ua.pp.helperzit.excelparser.ui.UIException;
+import ua.pp.helperzit.excelparser.ui.console.TableDescriptionConversation;
 
 public class TableGenerator {
 
-    public Table parseFile(String filePath, String tableName, TableParsingCriteria tableParsingCriteria) throws ServiceException {
-
-        Table table = new Table();
-
-        List<String> heads = table.getHeads();
-        List<String> keys = table.getKeys();
+    public Table parseFile() throws ServiceException, UIException {
+        
+        TableDescriptionConversation tableDescriptionConversation = new TableDescriptionConversation();
+        TableDescription tableDescription = tableDescriptionConversation.askTableDescription();
+        String filePath = tableDescription.getFilePath();
+        String tableName = tableDescription.getTableName();
+        TableParsingCriteria tableParsingCriteria = tableDescription.getTableParsingCriteria();
 
         int sheetNumber = tableParsingCriteria.getSheetNumber();
         int startRowNumber = tableParsingCriteria.getStartRowNumber();
@@ -37,6 +41,10 @@ public class TableGenerator {
 
         String[][] tableData = new String[endRowNumber - startRowNumber + 1][endColunmNumber - startColunmNumber + 1];
 
+        Table table = new Table();
+        List<String> heads = table.getHeads();
+        List<String> keys = table.getKeys();
+        
         try (Workbook workbook = WorkbookFactory.create(new FileInputStream(filePath))) {
 
             Sheet sheet = workbook.getSheetAt(sheetNumber);

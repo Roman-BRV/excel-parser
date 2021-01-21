@@ -20,7 +20,7 @@ import ua.pp.helperzit.excelparser.service.models.Table;
 import ua.pp.helperzit.excelparser.service.models.TableDescription;
 import ua.pp.helperzit.excelparser.service.models.TableParsingCriteria;
 import ua.pp.helperzit.excelparser.ui.UIException;
-import ua.pp.helperzit.excelparser.ui.console.ParsingCriteriaConversation;
+import ua.pp.helperzit.excelparser.ui.console.TableDescriptionConversation;
 
 public class ExcelParser {
 
@@ -83,19 +83,20 @@ public class ExcelParser {
 
         TableGenerator tableGenenerator = new TableGenerator();
         String tbl  = "table";
-        Table hardCodeTable = tableGenenerator.parseFile(fileXLSXPath, tbl, hardCodeCriteria);
+        //Table hardCodeTable = tableGenenerator.parseFile(fileXLSXPath, tbl, hardCodeCriteria);
+        Table hardCodeTable = new Table();
         System.out.println(hardCodeTable);
 
         System.out.println("-------------------------------------------------------");
 
-        ParsingCriteriaConversation parsingCriteriaConversation = new ParsingCriteriaConversation();
+        TableDescriptionConversation parsingCriteriaConversation = new TableDescriptionConversation();
         //parsingCriteriaConversation.startConversation();
         
-        TableDescription tableDescription = parsingCriteriaConversation.startConversation();
-        String filePath = tableDescription.getFilePath();
-        String tableName = tableDescription.getTableName();
-        TableParsingCriteria criteria = tableDescription.getTableParsingCriteria();
-        Table table = tableGenenerator.parseFile(filePath, tableName, criteria);
+//        TableDescription tableDescription = parsingCriteriaConversation.askTableDescription();
+//        String filePath = tableDescription.getFilePath();
+//        String tableName = tableDescription.getTableName();
+//        TableParsingCriteria criteria = tableDescription.getTableParsingCriteria();
+        Table table = tableGenenerator.parseFile();
         System.out.println(table);
         System.out.println("TableUI equals HardCodeTable - " + table.equals(hardCodeTable));
 
