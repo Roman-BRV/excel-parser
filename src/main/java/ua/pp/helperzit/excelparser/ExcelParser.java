@@ -17,14 +17,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import ua.pp.helperzit.excelparser.service.ServiceException;
 import ua.pp.helperzit.excelparser.service.TableGenerator;
 import ua.pp.helperzit.excelparser.service.models.Table;
-import ua.pp.helperzit.excelparser.service.models.TableDescription;
 import ua.pp.helperzit.excelparser.service.models.TableParsingCriteria;
-import ua.pp.helperzit.excelparser.ui.UIException;
 import ua.pp.helperzit.excelparser.ui.console.TableDescriptionConversation;
 
 public class ExcelParser {
 
-    public static void main(String[] args) throws IOException, ServiceException, UIException {
+    public static void main(String[] args) throws IOException, ServiceException {
 
         File currentDir = new File(".");
         String path = currentDir.getAbsolutePath();
@@ -96,7 +94,10 @@ public class ExcelParser {
 //        String filePath = tableDescription.getFilePath();
 //        String tableName = tableDescription.getTableName();
 //        TableParsingCriteria criteria = tableDescription.getTableParsingCriteria();
-        Table table = tableGenenerator.parseFile();
+        
+        // ! This is code which will stay at Main !
+        
+        Table table = tableGenenerator.generateTable();
         System.out.println(table);
         System.out.println("TableUI equals HardCodeTable - " + table.equals(hardCodeTable));
 
