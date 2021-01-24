@@ -2,9 +2,11 @@ package ua.pp.helperzit.excelparser;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
@@ -22,7 +24,7 @@ import ua.pp.helperzit.excelparser.ui.console.TableDescriptionConversation;
 
 public class ExcelParser {
 
-    public static void main(String[] args) throws IOException, ServiceException {
+    public static void main(String[] args) throws EncryptedDocumentException, FileNotFoundException, IOException {
 
         File currentDir = new File(".");
         String path = currentDir.getAbsolutePath();
@@ -97,9 +99,15 @@ public class ExcelParser {
         
         // ! This is code which will stay at Main !
         
-        Table table = tableGenenerator.generateTable();
-        System.out.println(table);
-        System.out.println("TableUI equals HardCodeTable - " + table.equals(hardCodeTable));
+        Table table;
+        try {
+            table = tableGenenerator.generateTable();
+            System.out.println(table);
+            System.out.println("TableUI equals HardCodeTable - " + table.equals(hardCodeTable));
+        } catch (ServiceException e) {
+            System.out.println("Application stoped it's work.");
+        }
+        
 
     }
 

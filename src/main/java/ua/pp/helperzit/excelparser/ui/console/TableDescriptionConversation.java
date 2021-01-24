@@ -65,7 +65,11 @@ public class TableDescriptionConversation {
             } while (!answer.equals(EXIT_COMMAND));
             
         } catch (Exception e) {
-            throw new UIException("Problems in UI layer");
+            throw new UIException("Problems in UI layer.", e);
+        }
+        
+        if(answer.equals(EXIT_COMMAND)) {
+            throw new UIException("User exited from conversation. Table description hasn't created.");
         }
         
         return tableDescription;
