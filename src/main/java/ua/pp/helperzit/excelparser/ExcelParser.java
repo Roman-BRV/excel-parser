@@ -105,6 +105,7 @@ public class ExcelParser {
             System.out.println(table);
             System.out.println("TableUI equals HardCodeTable - " + table.equals(hardCodeTable));
         } catch (ServiceException e) {
+            System.out.println("Goodbay! Have a nice day!");
             System.out.println("Application stoped it's work.");
         }
         

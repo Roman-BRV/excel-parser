@@ -30,14 +30,18 @@ public class TableDescriptionConversation {
 
         String answer;
         try (Scanner input = new Scanner(System.in);) {
-            do {
+            
+            while(true) {
+                
                 answer = input.nextLine();
+                
                 if (fileFinder.checkDirPath(answer)) {
                     System.out.println("It is directory. Includes:");
                     List<String> fileNames = fileFinder.getFileNames(answer);
                     for (String fileName : fileNames) {
                         System.out.println(fileName);
                     }
+                    System.out.println("Enter path to file:");
 
                 } else if (fileFinder.checkFilePath(answer)) {
                     System.out.println("File path correct - " + answer);
@@ -46,23 +50,26 @@ public class TableDescriptionConversation {
 
                     System.out.println("Enter name for parsing table. For example: deals_30-02-00:");
                     String tableName = input.nextLine();
+                    if(tableName.equals(EXIT_COMMAND)) {
+                        throw new UIException("User exited from conversation. Table description hasn't created.");
+                    }
                     tableDescription.setTableName(tableName);
 
                     TableParsingCriteria tableParsingCriteria = constructTableParsingCriteria(input);
                     tableDescription.setTableParsingCriteria(tableParsingCriteria);
-                    System.out.println(filePath);
-                    System.out.println(tableName);
-                    System.out.println(tableParsingCriteria);
+                    System.out.println("File for parsing: " + filePath);
+                    System.out.println("Table name: " + tableName);
+                    System.out.println("Excel coordinates for parsing: " + tableParsingCriteria);
                     break;
 
                 } else if(answer.equals(EXIT_COMMAND)) {
-                    System.out.println("Goodbay! Have a nice day!");
+                    throw new UIException("User exited from conversation. Table description hasn't created.");
 
                 } else {
                     System.out.println("Please enter correct path.");
 
                 }
-            } while (!answer.equals(EXIT_COMMAND));
+            } 
             
         } catch (Exception e) {
             throw new UIException("Problems in UI layer.", e);
@@ -76,25 +83,28 @@ public class TableDescriptionConversation {
 
     }
 
-    private TableParsingCriteria constructTableParsingCriteria(Scanner input) {
+    private TableParsingCriteria constructTableParsingCriteria(Scanner input) throws UIException {
 
         TableParsingCriteria criteria = new TableParsingCriteria();
-
+        
         System.out.println("Enter number of excel sheet (1 - first):");
         criteria.setSheetNumber(askForNumber(input) - 1);
 
         System.out.println("Enter name of start excel column (A - XFD for xlsx or A - IV for xls):");
         criteria.setStartColunmName(askForColumnName(input));
+        
         System.out.println("Enter number of start excel row (1 - 1048576 for xlsx or 1 - 65536 for xls):");
         criteria.setStartRowNumber(askForNumber(input) - 1);
 
         System.out.println("Enter name of end excel column (A - XFD for xlsx or A - IV for xls):");
         criteria.setEndColunmName(askForColumnName(input));
+        
         System.out.println("Enter number of end excel row (1 - 1048576 for xlsx or 1 - 65536 for xls):");
         criteria.setEndRowNumber(askForNumber(input) - 1);
 
         System.out.println("First parsing row has HEADs?");
         criteria.setHasHeads(askForBoolean(input));
+        
         System.out.println("Do you need in KEYs?");
         criteria.setHasKeys(askForBoolean(input));
         if(!criteria.isHasKeys()) {
@@ -107,7 +117,7 @@ public class TableDescriptionConversation {
         return criteria;
     }
 
-    private int askForNumber(Scanner input) {
+    private int askForNumber(Scanner input) throws UIException {
 
         boolean isEndOfQuery = false;
         String answer;
@@ -117,11 +127,15 @@ public class TableDescriptionConversation {
             answer = input.nextLine();
             if (answer.chars().allMatch( Character::isDigit ) && !answer.equals(EXIT_COMMAND)) {
                 numberAnswer = Integer.parseInt(answer);
-                isEndOfQuery = true;
+                if(numberAnswer > 0) {
+                    isEndOfQuery = true;
+                } else {
+                    System.out.println("You entered unexprcted answer.");
+                    System.out.println("Try once more:");
+                }
 
             } else if(answer.equals(EXIT_COMMAND)) {
-                System.out.println("You exit to uper level of conversation.");
-                isEndOfQuery = true;
+                throw new UIException("User exited from conversation. Table description hasn't created.");
 
             } else {
                 System.out.println("You entered unexprcted answer.");
@@ -129,12 +143,12 @@ public class TableDescriptionConversation {
 
             }
         } while (!isEndOfQuery);
-
+        
         return numberAnswer;
 
     }
 
-    private String askForColumnName (Scanner input) {
+    private String askForColumnName (Scanner input) throws UIException {
 
         boolean isEndOfQuery = false;
         String answer = "";
@@ -146,8 +160,7 @@ public class TableDescriptionConversation {
                 isEndOfQuery = true;
 
             } else if(answer.equals(EXIT_COMMAND)) {
-                System.out.println("You exit to uper level of conversation.");
-                isEndOfQuery = true;
+                throw new UIException("User exited from conversation. Table description hasn't created.");
 
             } else {
                 System.out.println("You entered unexprcted answer.");
@@ -160,7 +173,7 @@ public class TableDescriptionConversation {
 
     }
 
-    private boolean askForBoolean(Scanner input) {
+    private boolean askForBoolean(Scanner input) throws UIException {
 
         boolean isEndOfQuery = false;
         String answer;
@@ -176,8 +189,7 @@ public class TableDescriptionConversation {
                 isEndOfQuery = true;
 
             } else if(answer.equals(EXIT_COMMAND)) {
-                System.out.println("You exit to uper level of conversation.");
-                isEndOfQuery = true;
+                throw new UIException("User exited from conversation. Table description hasn't created.");
 
             } else {
                 System.out.println("You entered unexprcted answer.");
