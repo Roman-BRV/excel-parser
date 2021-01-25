@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<configuration debug="false">
+
+  <property name="filePath" value="logging" />
+  <property name="filename" value="application" />
+  <property name="root.log.level" value="DEBUG" />
+  <property name="org.log.level" value="INFO" />
+  <property name="app.log.level" value="INFO" />
+  
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- encoders are assigned the type
+         ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+    <encoder>
+      <pattern>%d{dd.MM.yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{20} - %m%n</pattern>
+    </encoder>
+  </appender>
+  
+  
+    <appender name="allActions"
+        class="ch.qos.logback.core.rolling.RollingFileAppender">
+        
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${root.log.level}</level>
+        </filter>
+        
+        <file>${filePath}/allActions.log</file>
+        
+        <rollingPolicy
+            class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${filePath}/allActions.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>200MB</maxFileSize>    
+            <maxHistory>60</maxHistory>
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+        
+        <encoder>
+            <pattern>%d{dd.MM.yyyy HH:mm:ss.SSS} [%thread] %-5level %50(%logger{50}) - %m %throwable{short} %n</pattern>
+        </encoder>
+        
+    </appender>
+    
+    <appender name="application"
+        class="ch.qos.logback.core.rolling.RollingFileAppender">
+        
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${app.log.level}</level>
+        </filter>
+        
+        <file>${filePath}/${filename}.log</file>
+        
+        <rollingPolicy
+            class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${filePath}/${filename}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>33</maxHistory>
+            <totalSizeCap>5GB</totalSizeCap>
+        </rollingPolicy>
+        
+        <encoder>
+            <pattern>%d{dd.MM.yyyy HH:mm:ss.SSS} [%thread] %-5level %50(%logger{50}) - %m %throwable{short} %n</pattern>
+        </encoder>
+    </appender>
+    
+    <appender name="applicationError"
+        class="ch.qos.logback.core.rolling.RollingFileAppender">
+        
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        
+        <file>${filePath}/${filename}_error.log</file>
+        
+        <rollingPolicy
+            class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${filePath}/${filename}_error.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>33</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        
+        <encoder>
+            <pattern>%d{dd.MM.yyyy HH:mm:ss.SSS} [%thread] %-5level %50(%logger{50}) [%L] - %m%n</pattern>
+        </encoder>
+        
+    </appender>
+  
+  <logger name="ua.pp.helperzit.excelparser">
+    <appender-ref ref="application" />
+    <appender-ref ref="applicationError" />
+  </logger>
+  
+  <logger name="org" level="${org.log.level}">
+  </logger>
+  
+  <root level="${root.log.level}">
+    <appender-ref ref="allActions" />
+  </root>
+  
+</configuration>
