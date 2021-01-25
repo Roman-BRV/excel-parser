@@ -14,6 +14,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ua.pp.helperzit.excelparser.service.models.Table;
 import ua.pp.helperzit.excelparser.service.models.TableDescription;
@@ -22,14 +24,20 @@ import ua.pp.helperzit.excelparser.ui.UIException;
 import ua.pp.helperzit.excelparser.ui.console.TableDescriptionConversation;
 
 public class TableGenerator {
+    
+    private static final Logger log = LoggerFactory.getLogger(TableGenerator.class);
 
     public Table generateTable() throws ServiceException {
+        
+        log.debug("Going to generate table by user's description.");
 
         TableDescriptionConversation tableDescriptionConversation = new TableDescriptionConversation();
         TableDescription tableDescription;
         try {
             tableDescription = tableDescriptionConversation.askTableDescription();
+            log.debug("{} has been successfully getted.", tableDescription);
         } catch (UIException uiException) {
+            log.error("Conversation with user was failed with message: {}", uiException.getMessage(),  uiException);
             throw new ServiceException("Something went wrong whit in UI layer.", uiException);
         }
         String filePath = tableDescription.getFilePath();
@@ -47,8 +55,14 @@ public class TableGenerator {
 
         List<String> heads= new ArrayList<>();
         List<String> keys = new ArrayList<>();
-        String[][] tableData = new String[endRowNumber - startRowNumber + 1][endColunmNumber - startColunmNumber + 1];
+        int rowCount = endRowNumber - startRowNumber + 1;
+        if(hasHeads) {
+            rowCount--;
+        }
+        int columnCount = endColunmNumber - startColunmNumber + 1;
+        String[][] tableData = new String[rowCount][columnCount];
 
+        log.debug("Start parsing Excel file: {}.", filePath);
         try (Workbook workbook = WorkbookFactory.create(new FileInputStream(filePath))) {
 
             Sheet sheet = workbook.getSheetAt(sheetNumber);
@@ -83,10 +97,13 @@ public class TableGenerator {
             }
 
         } catch (EncryptedDocumentException e) {
+            log.error("Parsing of Excel file - {} was failed with message: {}", filePath, e.getMessage(), e);
             throw new ServiceException("Something went wrong whit parsing Excel file - " + filePath, e);
         } catch (FileNotFoundException e) {
+            log.error("Excel file -  {}  not founded.", filePath, e);
             throw new ServiceException("Excel file - " + filePath + " not founded.", e);
         } catch (IOException e) {
+            log.error("Reading Excel file - {} was failed with message: {}.", filePath, e.getMessage(), e);
             throw new ServiceException("Something went wrong whit reading Excel file - " + filePath, e);
         } 
 
@@ -99,20 +116,26 @@ public class TableGenerator {
         table.setKeys(keys);
         table.setTableData(tableData);
 
+        log.debug("{} has been successfully generated.", table);
+        
         return table;
 
     }
 
     private void parseHeads(List<String> heads, Sheet sheet, boolean hasHeads, int startRowNumber, int startColunmNumber, int endColunmNumber) throws ServiceException{
 
+        log.debug("Going to parse heads of columns in propoused table.");
+        
         if(!hasHeads) {
             for (int colunmIndex = startColunmNumber; colunmIndex <= endColunmNumber; colunmIndex++) {
                 heads.add("At column - " + CellReference.convertNumToColString(colunmIndex));
+                log.debug("Setted default heads of columns.");
             }
         } else {
             Row row = sheet.getRow(startRowNumber);
             if(row == null) {
-                throw new ServiceException("Excel row nubber: " + (startRowNumber + 1) + " is empty. Heads row cannot be empty!");
+                log.error("Excel row number: {} is empty. Heads row cannot be empty!",(startRowNumber + 1));
+                throw new ServiceException("Excel row number: " + (startRowNumber + 1) + " is empty. Heads row cannot be empty!");
             }
 
             for (int columnIndex = startColunmNumber; columnIndex <= endColunmNumber; columnIndex++) {
@@ -120,6 +143,8 @@ public class TableGenerator {
                 heads.add(geStringValue(cell));
             }
         }
+        
+        log.debug("Heads of columns in propoused table has been successfully parsed.");
     }
 
     private void setKeyIfDefault(List<String> keys, boolean hasKeys, Row row, int rowIndex){
@@ -128,7 +153,9 @@ public class TableGenerator {
             keys.add("At row - " + (rowIndex + 1));
         } else if(row == null) {
             keys.add("All row - " + (rowIndex + 1) + " empty.");
-        }  
+        }
+        
+        log.debug("Setted default key of row.");
     }
 
     private static String geStringValue(Cell cell) {
