@@ -3,12 +3,17 @@ package ua.pp.helperzit.excelparser.ui.console;
 import java.util.List;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import ua.pp.helperzit.excelparser.service.FileFinder;
 import ua.pp.helperzit.excelparser.service.models.TableDescription;
 import ua.pp.helperzit.excelparser.service.models.TableParsingCriteria;
-import ua.pp.helperzit.excelparser.ui.FileFinder;
 import ua.pp.helperzit.excelparser.ui.UIException;
 
 public class TableDescriptionConversation {
+    
+    private static final Logger log = LoggerFactory.getLogger(TableDescriptionConversation.class);
 
     private static final String EXCEL_COLUMN_NAME_PATTERN = "^[A-Z]{1,3}";
 
@@ -18,8 +23,11 @@ public class TableDescriptionConversation {
     private static final String UNEXIST_KEY_COLUMN_NAME = "default";
 
     private static final String EXIT_COMMAND = "EXIT!";
+    private static final String USER_EXIT_MESSAGE = "User entered exit comand. Table description hasn't created.";
 
     public TableDescription askTableDescription() throws UIException {
+        
+        log.debug("Start conversation with user for getting table description.");
 
         FileFinder fileFinder = new FileFinder();
         TableDescription tableDescription = new TableDescription();
@@ -44,15 +52,19 @@ public class TableDescriptionConversation {
                     System.out.println("Enter path to file:");
 
                 } else if (fileFinder.checkFilePath(answer)) {
+                    
                     System.out.println("File path correct - " + answer);
                     String filePath = answer;
+                    log.debug("User entered correct file path - {}.", filePath);
                     tableDescription.setFilePath(filePath);
 
                     System.out.println("Enter name for parsing table. For example: deals_30-02-00:");
                     String tableName = input.nextLine();
                     if(tableName.equals(EXIT_COMMAND)) {
-                        throw new UIException("User exited from conversation. Table description hasn't created.");
+                        log.warn(USER_EXIT_MESSAGE);
+                        throw new UIException(USER_EXIT_MESSAGE);
                     }
+                    log.debug("User entered name of tanle (future object)  - {}.", tableName);
                     tableDescription.setTableName(tableName);
 
                     TableParsingCriteria tableParsingCriteria = constructTableParsingCriteria(input);
@@ -63,7 +75,8 @@ public class TableDescriptionConversation {
                     break;
 
                 } else if(answer.equals(EXIT_COMMAND)) {
-                    throw new UIException("User exited from conversation. Table description hasn't created.");
+                    log.warn(USER_EXIT_MESSAGE);
+                    throw new UIException(USER_EXIT_MESSAGE);
 
                 } else {
                     System.out.println("Please enter correct path.");
@@ -75,10 +88,6 @@ public class TableDescriptionConversation {
             throw new UIException("Problems in UI layer.", e);
         }
         
-        if(answer.equals(EXIT_COMMAND)) {
-            throw new UIException("User exited from conversation. Table description hasn't created.");
-        }
-        
         return tableDescription;
 
     }
@@ -88,32 +97,51 @@ public class TableDescriptionConversation {
         TableParsingCriteria criteria = new TableParsingCriteria();
         
         System.out.println("Enter number of excel sheet (1 - first):");
-        criteria.setSheetNumber(askForNumber(input) - 1);
+        int sheetNumber = askForNumber(input) - 1;
+        log.debug("User entered sheet number (index): {}.", sheetNumber);
+        criteria.setSheetNumber(sheetNumber);
 
         System.out.println("Enter name of start excel column (A - XFD for xlsx or A - IV for xls):");
-        criteria.setStartColunmName(askForColumnName(input));
+        String startColunmName = askForColumnName(input);
+        log.debug("User entered start colunm name: {}.", startColunmName);
+        criteria.setStartColunmName(startColunmName);
         
         System.out.println("Enter number of start excel row (1 - 1048576 for xlsx or 1 - 65536 for xls):");
-        criteria.setStartRowNumber(askForNumber(input) - 1);
+        int startRowNumber = askForNumber(input) - 1;
+        log.debug("User entered start row number (index): {}.", startRowNumber);
+        criteria.setStartRowNumber(startRowNumber);
 
         System.out.println("Enter name of end excel column (A - XFD for xlsx or A - IV for xls):");
-        criteria.setEndColunmName(askForColumnName(input));
+        String endColunmName = askForColumnName(input);
+        log.debug("User entered end colunm name: {}.", endColunmName);
+        criteria.setEndColunmName(endColunmName);
         
         System.out.println("Enter number of end excel row (1 - 1048576 for xlsx or 1 - 65536 for xls):");
-        criteria.setEndRowNumber(askForNumber(input) - 1);
+        int endRowNumber = askForNumber(input) - 1;
+        log.debug("User entered end row number (index): {}.", endRowNumber);
+        criteria.setEndRowNumber(endRowNumber);
 
         System.out.println("First parsing row has HEADs?");
-        criteria.setHasHeads(askForBoolean(input));
+        boolean hasHeads = askForBoolean(input);
+        log.debug("User entered: has first row table heads - {}.", hasHeads);
+        criteria.setHasHeads(hasHeads);
         
         System.out.println("Do you need in KEYs?");
-        criteria.setHasKeys(askForBoolean(input));
+        boolean hasKeys = askForBoolean(input);
+        log.debug("User entered: has table column with keys - {}.", hasKeys);
+        criteria.setHasKeys(hasKeys);
         if(!criteria.isHasKeys()) {
             criteria.setKeyColunmName(UNEXIST_KEY_COLUMN_NAME);
+            log.debug("Table hasn't column with keys. Setted default value - {}.", UNEXIST_KEY_COLUMN_NAME);
         }else {
             System.out.println("Enter name of KEY excel column (ONLY between name of start excel column and name of end excel column).");
-            criteria.setKeyColunmName(askForColumnName(input));
+            String keyColunmName = askForColumnName(input);
+            log.debug("User entered key colunm name: {}.", keyColunmName);
+            criteria.setKeyColunmName(keyColunmName);
         }
 
+        log.debug("{} has been successfully generated.", criteria);
+        
         return criteria;
     }
 
@@ -130,16 +158,15 @@ public class TableDescriptionConversation {
                 if(numberAnswer > 0) {
                     isEndOfQuery = true;
                 } else {
-                    System.out.println("You entered unexprcted answer.");
-                    System.out.println("Try once more:");
+                    unexprctedAnswerHendling(answer);
                 }
 
             } else if(answer.equals(EXIT_COMMAND)) {
-                throw new UIException("User exited from conversation. Table description hasn't created.");
+                log.warn(USER_EXIT_MESSAGE);
+                throw new UIException(USER_EXIT_MESSAGE);
 
             } else {
-                System.out.println("You entered unexprcted answer.");
-                System.out.println("Try once more:");
+                unexprctedAnswerHendling(answer);
 
             }
         } while (!isEndOfQuery);
@@ -160,11 +187,11 @@ public class TableDescriptionConversation {
                 isEndOfQuery = true;
 
             } else if(answer.equals(EXIT_COMMAND)) {
-                throw new UIException("User exited from conversation. Table description hasn't created.");
+                log.warn(USER_EXIT_MESSAGE);
+                throw new UIException(USER_EXIT_MESSAGE);
 
             } else {
-                System.out.println("You entered unexprcted answer.");
-                System.out.println("Try once more:");
+                unexprctedAnswerHendling(answer);
 
             }
         } while (!isEndOfQuery);
@@ -189,17 +216,24 @@ public class TableDescriptionConversation {
                 isEndOfQuery = true;
 
             } else if(answer.equals(EXIT_COMMAND)) {
-                throw new UIException("User exited from conversation. Table description hasn't created.");
+                log.warn(USER_EXIT_MESSAGE);
+                throw new UIException(USER_EXIT_MESSAGE);
 
             } else {
-                System.out.println("You entered unexprcted answer.");
-                System.out.println("Try once more:");
+                unexprctedAnswerHendling(answer);
 
             }
         } while (!isEndOfQuery);
 
         return booleanAnswer;
 
+    }
+    
+    private void unexprctedAnswerHendling(String answer) {
+        
+        log.warn("User unexprcted answer - {}. Start to ask once more.", answer);
+        System.out.println("You entered unexprcted answer.");
+        System.out.println("Try once more:");
     }
 
     private void printAppDescription() {

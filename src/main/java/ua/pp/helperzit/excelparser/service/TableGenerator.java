@@ -66,6 +66,7 @@ public class TableGenerator {
         try (Workbook workbook = WorkbookFactory.create(new FileInputStream(filePath))) {
 
             Sheet sheet = workbook.getSheetAt(sheetNumber);
+            log.debug("Get Excel sheet number: {}.", (sheetNumber + 1));
 
             parseHeads(heads, sheet, hasHeads, startRowNumber, startColunmNumber, endColunmNumber);
             if(hasHeads) {
@@ -95,6 +96,7 @@ public class TableGenerator {
                 tmpRowIndex++;
 
             }
+            log.debug("Propoused table area has been successfully parsed.");
 
         } catch (EncryptedDocumentException e) {
             log.error("Parsing of Excel file - {} was failed with message: {}", filePath, e.getMessage(), e);
@@ -129,7 +131,7 @@ public class TableGenerator {
         if(!hasHeads) {
             for (int colunmIndex = startColunmNumber; colunmIndex <= endColunmNumber; colunmIndex++) {
                 heads.add("At column - " + CellReference.convertNumToColString(colunmIndex));
-                log.debug("Setted default heads of columns.");
+                log.debug("Setted default heads of all columns.");
             }
         } else {
             Row row = sheet.getRow(startRowNumber);
@@ -155,7 +157,7 @@ public class TableGenerator {
             keys.add("All row - " + (rowIndex + 1) + " empty.");
         }
         
-        log.debug("Setted default key of row.");
+        log.debug("Setted default key at Excel row number: {}.", (rowIndex + 1));
     }
 
     private static String geStringValue(Cell cell) {
