@@ -3,6 +3,8 @@ package ua.pp.helperzit.excelparser.service;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +14,7 @@ class FileFinderTest {
     private static final String TEST_FILE_DIR = "src\\test\\resources\\";
     private static final String TEST_XLSX_FILE_NAME = "test.xlsx";
     private static final String TEST_XLS_FILE_NAME = "test.xls";
+    private static final String UNEXIST_FILE_NAME = "unexist";
     
     FileFinder fileFinder;
 
@@ -20,17 +23,51 @@ class FileFinderTest {
         
         fileFinder = new FileFinder();
     }
+    
+    @Test
+    void checkDirectoryPathShouldReturnTrueIfCheckedPathIsDirectory() {
+        String currentDirPath = getTestDirAbsolutePath();
+        assertTrue(fileFinder.checkDirectoryPath(currentDirPath));
+    }
+    
+    @Test
+    void checkDirectoryPathShouldReturnFalseIfCheckedDirectoryUnexist() {
+        String unexistDirPath = getTestDirAbsolutePath() + UNEXIST_FILE_NAME;
+        assertFalse(fileFinder.checkDirectoryPath(unexistDirPath));
+    }
 
     @Test
-    void checkFilePathShouldReturnTrueIfXlsxFileExists() {
+    void checkFilePathShouldReturnTrueIfCheckedXlsxFileExists() {
         String currentXlsxPath = getTestDirAbsolutePath() + TEST_XLSX_FILE_NAME;
         assertTrue(fileFinder.checkFilePath(currentXlsxPath));
     }
     
     @Test
-    void checkFilePathShouldReturnTrueIfXlsFileExists() {
+    void checkFilePathShouldReturnTrueIfCheckedXlsFileExists() {
         String currentXlsPath = getTestDirAbsolutePath() + TEST_XLS_FILE_NAME;
         assertTrue(fileFinder.checkFilePath(currentXlsPath));
+    }
+    
+    @Test
+    void checkFilePathShouldReturnFalseIfCheckedPathIsDirectory() {
+        String currentDirPath = getTestDirAbsolutePath();
+        assertFalse(fileFinder.checkFilePath(currentDirPath));
+    }
+    
+    @Test
+    void checkFilePathShouldReturnFalseIfCheckedFileUnexist() {
+        String unexistFilePath = getTestDirAbsolutePath() + UNEXIST_FILE_NAME;
+        assertFalse(fileFinder.checkFilePath(unexistFilePath));
+    }
+    
+    @Test
+    void getFileNamesShouldReturnListOfIncludedFileNames() {
+        List<String> expDirsFilesNames = new ArrayList<>();
+        expDirsFilesNames.add(TEST_XLS_FILE_NAME);
+        expDirsFilesNames.add(TEST_XLSX_FILE_NAME);
+        String currentDirPath = getTestDirAbsolutePath();
+        
+        assertEquals(expDirsFilesNames, fileFinder.getFileNames(currentDirPath));
     }
     
     private String getTestDirAbsolutePath() {

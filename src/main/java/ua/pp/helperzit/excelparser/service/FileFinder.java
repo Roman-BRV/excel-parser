@@ -13,7 +13,7 @@ public class FileFinder {
     
     private static final Logger log = LoggerFactory.getLogger(FileFinder.class);
 
-    public boolean checkDirPath(String path){
+    public boolean checkDirectoryPath(String path){
 
         log.debug("Checking: is {} - is a directory.", path);
         

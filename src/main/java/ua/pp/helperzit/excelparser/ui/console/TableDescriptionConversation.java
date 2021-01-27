@@ -43,7 +43,7 @@ public class TableDescriptionConversation {
                 
                 answer = input.nextLine();
                 
-                if (fileFinder.checkDirPath(answer)) {
+                if (fileFinder.checkDirectoryPath(answer)) {
                     System.out.println("It is directory. Includes:");
                     List<String> fileNames = fileFinder.getFileNames(answer);
                     for (String fileName : fileNames) {
