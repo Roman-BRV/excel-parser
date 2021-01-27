@@ -50,7 +50,14 @@ class TableGeneratorTest {
     }
 
     @Test
-    void testGenerateTable() throws ServiceException, UIException {
+    void generateTableShouldThrowServiceExceptionWhenTableDescriptionConversationThrowUIException() throws ServiceException, UIException {
+        
+        when(mockTableDescriptionConversation.askTableDescription()).thenThrow(new UIException());
+        assertThrows(ServiceException.class, () -> tableGenerator.generateTable());
+    }
+    
+    @Test
+    void generateTableShouldReturnSuchTableWhenSuccessfullyParseExcelFile() throws ServiceException, UIException {
         
         Table expTable = expTableConstruct();
         
