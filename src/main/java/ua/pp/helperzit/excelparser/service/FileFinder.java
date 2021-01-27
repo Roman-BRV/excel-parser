@@ -10,39 +10,39 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class FileFinder {
-    
+
     private static final Logger log = LoggerFactory.getLogger(FileFinder.class);
 
     public boolean checkDirectoryPath(String path){
 
         log.debug("Checking: is {} - is a directory.", path);
-        
+
         File file = new File(path);
         boolean checkResult  = file.isDirectory();
-        
+
         log.debug("{} - is a directory - {}.", path, checkResult);
 
         return checkResult;
     }
 
     public boolean checkFilePath(String path){
-        
+
         log.debug("Checking: is {} - is a correct path.", path);
 
         File file = new File(path);
         boolean checkResult  = false;
-        
+
         if(path.endsWith(".xls") || path.endsWith(".xlsx")) {
             checkResult  = file.exists();
         }
 
         log.debug("{} - is a correct path - {}.", path, checkResult);
-        
+
         return checkResult;
     }
 
     public List<String> getFileNames(String path){
-        
+
         log.debug("Going to get names of incledes in directory: {}.", path);
 
         List<String> dirsFilesNames = new ArrayList<>();

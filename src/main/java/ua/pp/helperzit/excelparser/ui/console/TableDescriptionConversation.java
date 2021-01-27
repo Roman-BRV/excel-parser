@@ -12,7 +12,7 @@ import ua.pp.helperzit.excelparser.service.models.TableParsingCriteria;
 import ua.pp.helperzit.excelparser.ui.UIException;
 
 public class TableDescriptionConversation {
-    
+
     private static final Logger log = LoggerFactory.getLogger(TableDescriptionConversation.class);
 
     private static final String EXCEL_COLUMN_NAME_PATTERN = "^[A-Z]{1,3}";
@@ -25,24 +25,25 @@ public class TableDescriptionConversation {
     private static final String EXIT_COMMAND = "EXIT!";
     private static final String USER_EXIT_MESSAGE = "User entered exit comand. Table description hasn't created.";
 
+    private FileFinder fileFinder = new FileFinder();
+
     public TableDescription askTableDescription() throws UIException {
-        
+
         log.debug("Start conversation with user for getting table description.");
 
-        FileFinder fileFinder = new FileFinder();
         TableDescription tableDescription = new TableDescription();
-        
+
         System.out.println("Hello I`m chatbot Marichka. Welcome at Excel Parser!");
         printAppDescription();
         System.out.println("Enter path to file:");
 
         String answer;
         try (Scanner input = new Scanner(System.in);) {
-            
+
             while(true) {
-                
+
                 answer = input.nextLine();
-                
+
                 if (fileFinder.checkDirectoryPath(answer)) {
                     System.out.println("It is directory. Includes:");
                     List<String> fileNames = fileFinder.getFileNames(answer);
@@ -52,7 +53,7 @@ public class TableDescriptionConversation {
                     System.out.println("Enter path to file:");
 
                 } else if (fileFinder.checkFilePath(answer)) {
-                    
+
                     System.out.println("File path correct - " + answer);
                     String filePath = answer;
                     log.debug("User entered correct file path - {}.", filePath);
@@ -83,11 +84,11 @@ public class TableDescriptionConversation {
 
                 }
             } 
-            
+
         } catch (Exception e) {
             throw new UIException("Problems in UI layer.", e);
         }
-        
+
         return tableDescription;
 
     }
@@ -95,7 +96,7 @@ public class TableDescriptionConversation {
     private TableParsingCriteria constructTableParsingCriteria(Scanner input) throws UIException {
 
         TableParsingCriteria criteria = new TableParsingCriteria();
-        
+
         System.out.println("Enter number of excel sheet (1 - first):");
         int sheetNumber = askForNumber(input) - 1;
         log.debug("User entered sheet number (index): {}.", sheetNumber);
@@ -105,7 +106,7 @@ public class TableDescriptionConversation {
         String startColunmName = askForColumnName(input);
         log.debug("User entered start colunm name: {}.", startColunmName);
         criteria.setStartColunmName(startColunmName);
-        
+
         System.out.println("Enter number of start excel row (1 - 1048576 for xlsx or 1 - 65536 for xls):");
         int startRowNumber = askForNumber(input) - 1;
         log.debug("User entered start row number (index): {}.", startRowNumber);
@@ -115,7 +116,7 @@ public class TableDescriptionConversation {
         String endColunmName = askForColumnName(input);
         log.debug("User entered end colunm name: {}.", endColunmName);
         criteria.setEndColunmName(endColunmName);
-        
+
         System.out.println("Enter number of end excel row (1 - 1048576 for xlsx or 1 - 65536 for xls):");
         int endRowNumber = askForNumber(input) - 1;
         log.debug("User entered end row number (index): {}.", endRowNumber);
@@ -125,7 +126,7 @@ public class TableDescriptionConversation {
         boolean hasHeads = askForBoolean(input);
         log.debug("User entered: has first row table heads - {}.", hasHeads);
         criteria.setHasHeads(hasHeads);
-        
+
         System.out.println("Do you need in KEYs?");
         boolean hasKeys = askForBoolean(input);
         log.debug("User entered: has table column with keys - {}.", hasKeys);
@@ -141,7 +142,7 @@ public class TableDescriptionConversation {
         }
 
         log.debug("{} has been successfully generated.", criteria);
-        
+
         return criteria;
     }
 
@@ -170,7 +171,7 @@ public class TableDescriptionConversation {
 
             }
         } while (!isEndOfQuery);
-        
+
         return numberAnswer;
 
     }
@@ -228,9 +229,9 @@ public class TableDescriptionConversation {
         return booleanAnswer;
 
     }
-    
+
     private void unexprctedAnswerHendling(String answer) {
-        
+
         log.warn("User unexprcted answer - {}. Start to ask once more.", answer);
         System.out.println("You entered unexprcted answer.");
         System.out.println("Try once more:");

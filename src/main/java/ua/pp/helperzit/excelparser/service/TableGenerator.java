@@ -24,14 +24,15 @@ import ua.pp.helperzit.excelparser.ui.UIException;
 import ua.pp.helperzit.excelparser.ui.console.TableDescriptionConversation;
 
 public class TableGenerator {
-    
+
     private static final Logger log = LoggerFactory.getLogger(TableGenerator.class);
 
+    private TableDescriptionConversation tableDescriptionConversation = new TableDescriptionConversation();
+
     public Table generateTable() throws ServiceException {
-        
+
         log.debug("Going to generate table by user's description.");
 
-        TableDescriptionConversation tableDescriptionConversation = new TableDescriptionConversation();
         TableDescription tableDescription;
         try {
             tableDescription = tableDescriptionConversation.askTableDescription();
@@ -119,7 +120,7 @@ public class TableGenerator {
         table.setTableData(tableData);
 
         log.debug("{} has been successfully generated.", table);
-        
+
         return table;
 
     }
@@ -127,7 +128,7 @@ public class TableGenerator {
     private void parseHeads(List<String> heads, Sheet sheet, boolean hasHeads, int startRowNumber, int startColunmNumber, int endColunmNumber) throws ServiceException{
 
         log.debug("Going to parse heads of columns in propoused table.");
-        
+
         if(!hasHeads) {
             for (int colunmIndex = startColunmNumber; colunmIndex <= endColunmNumber; colunmIndex++) {
                 heads.add("At column - " + CellReference.convertNumToColString(colunmIndex));
@@ -145,7 +146,7 @@ public class TableGenerator {
                 heads.add(geStringValue(cell));
             }
         }
-        
+
         log.debug("Heads of columns in propoused table has been successfully parsed.");
     }
 
@@ -156,7 +157,7 @@ public class TableGenerator {
         } else if(row == null) {
             keys.add("All row - " + (rowIndex + 1) + " empty.");
         }
-        
+
         log.debug("Setted default key at Excel row number: {}.", (rowIndex + 1));
     }
 

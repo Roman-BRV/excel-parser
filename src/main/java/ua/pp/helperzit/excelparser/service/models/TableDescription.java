@@ -1,20 +1,20 @@
 package ua.pp.helperzit.excelparser.service.models;
 
 public class TableDescription {
-    
+
     private String filePath;
     private String tableName;
     private TableParsingCriteria tableParsingCriteria;
-    
+
     public TableDescription() {
-        
+
         this.filePath = "";
         this.tableName = "";
         this.tableParsingCriteria = new TableParsingCriteria();
     }
-    
+
     public TableDescription(String filePath, String tableName, TableParsingCriteria tableParsingCriteria) {
-        
+
         this.filePath = filePath;
         this.tableName = tableName;
         this.tableParsingCriteria = tableParsingCriteria;

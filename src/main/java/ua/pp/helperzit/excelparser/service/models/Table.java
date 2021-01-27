@@ -12,7 +12,6 @@ public class Table {
     List<String> heads;
     List<String> keys;
     private String[][] tableData;
-    //private Map<String, List<Map<String, String>>> tableData;
 
     public Table() {
 
