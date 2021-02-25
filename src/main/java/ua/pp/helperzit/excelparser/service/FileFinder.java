@@ -41,11 +41,11 @@ public class FileFinder {
         return checkResult;
     }
 
-    public List<String> getFileNames(String path){
+    public List<String> getInclusionsNames(String path){
 
         log.debug("Going to get names of incledes in directory: {}.", path);
 
-        List<String> dirsFilesNames = new ArrayList<>();
+        List<String> inclusionsNames = new ArrayList<>();
         List<String> dirNames = new ArrayList<>();
         List<String> fileNames = new ArrayList<>();
 
@@ -58,12 +58,12 @@ public class FileFinder {
                 fileNames.add(file.getName());
             }
         }
-        dirsFilesNames.addAll(dirNames.stream().sorted().collect(Collectors.toList()));
-        dirsFilesNames.addAll(fileNames.stream().sorted().collect(Collectors.toList()));
+        inclusionsNames.addAll(dirNames.stream().sorted().collect(Collectors.toList()));
+        inclusionsNames.addAll(fileNames.stream().sorted().collect(Collectors.toList()));
 
         log.debug("Names of incledes in directory: {} have been successfully getted.", path);
 
-        return dirsFilesNames;
+        return inclusionsNames;
     }
 
 }

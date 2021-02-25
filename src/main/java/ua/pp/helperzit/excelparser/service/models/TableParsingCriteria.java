@@ -21,18 +21,6 @@ public class TableParsingCriteria {
 
     }
 
-    public TableParsingCriteria(int sheetNumber, int startRowNumber, String startColunmName, int endRowNumber, String endColunmName, boolean hasHeads, boolean hasKeys, String keyColunmName) {
-
-        this.sheetNumber = sheetNumber;
-        this.startRowNumber = startRowNumber;
-        this.startColunmName = startColunmName;
-        this.endRowNumber = endRowNumber;
-        this.endColunmName = endColunmName;
-        this.hasHeads = hasHeads;
-        this.hasKeys = hasKeys;
-        this.keyColunmName = keyColunmName;
-    }
-
     public int getSheetNumber() {
         return sheetNumber;
     }

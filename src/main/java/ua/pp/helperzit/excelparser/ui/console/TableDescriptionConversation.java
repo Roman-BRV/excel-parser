@@ -46,7 +46,7 @@ public class TableDescriptionConversation {
 
                 if (fileFinder.checkDirectoryPath(answer)) {
                     System.out.println("It is directory. Includes:");
-                    List<String> fileNames = fileFinder.getFileNames(answer);
+                    List<String> fileNames = fileFinder.getInclusionsNames(answer);
                     for (String fileName : fileNames) {
                         System.out.println(fileName);
                     }

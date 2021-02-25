@@ -49,7 +49,7 @@ public class TableGenerator {
         int startRowNumber = tableParsingCriteria.getStartRowNumber();
         int startColunmNumber = CellReference.convertColStringToIndex(tableParsingCriteria.getStartColunmName());
         int endRowNumber = tableParsingCriteria.getEndRowNumber();
-        int endColunmNumber = CellReference.convertColStringToIndex(tableParsingCriteria.getEndColunmName());
+        int endColumnNumber = CellReference.convertColStringToIndex(tableParsingCriteria.getEndColunmName());
         boolean hasHeads = tableParsingCriteria.isHasHeads();
         boolean hasKeys = tableParsingCriteria.isHasKeys();
         int keyColunmNumber = CellReference.convertColStringToIndex(tableParsingCriteria.getKeyColunmName());
@@ -60,7 +60,7 @@ public class TableGenerator {
         if(hasHeads) {
             rowCount--;
         }
-        int columnCount = endColunmNumber - startColunmNumber + 1;
+        int columnCount = endColumnNumber - startColunmNumber + 1;
         String[][] tableData = new String[rowCount][columnCount];
 
         log.debug("Start parsing Excel file: {}.", filePath);
@@ -69,7 +69,7 @@ public class TableGenerator {
             Sheet sheet = workbook.getSheetAt(sheetNumber);
             log.debug("Get Excel sheet number: {}.", (sheetNumber + 1));
 
-            parseHeads(heads, sheet, hasHeads, startRowNumber, startColunmNumber, endColunmNumber);
+            parseHeads(heads, sheet, hasHeads, startRowNumber, startColunmNumber, endColumnNumber);
             if(hasHeads) {
                 startRowNumber++;
             }
@@ -85,7 +85,7 @@ public class TableGenerator {
 
                 int tmpCellIndex = 0;
 
-                for (int columnIndex = startColunmNumber; columnIndex <= endColunmNumber; columnIndex++) {
+                for (int columnIndex = startColunmNumber; columnIndex <= endColumnNumber; columnIndex++) {
 
                     Cell cell = row.getCell(columnIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                     tableData[tmpRowIndex][tmpCellIndex] = geStringValue(cell);

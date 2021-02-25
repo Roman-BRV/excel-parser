@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 class FileFinderTest {
 
     private static final String TEST_FILE_DIR = "src\\test\\resources\\";
+    private static final String TEST_EMPTY_DIR_NAME = "emptyDirectory";
     private static final String TEST_XLSX_FILE_NAME = "test.xlsx";
     private static final String TEST_XLS_FILE_NAME = "test.xls";
     private static final String UNEXIST_FILE_NAME = "unexist";
@@ -61,13 +62,20 @@ class FileFinderTest {
     }
     
     @Test
-    void getFileNamesShouldReturnListOfIncludedFileNames() {
-        List<String> expDirsFilesNames = new ArrayList<>();
-        expDirsFilesNames.add(TEST_XLS_FILE_NAME);
-        expDirsFilesNames.add(TEST_XLSX_FILE_NAME);
+    void getInclusionsNamesShouldReturnListOfInclusionsNamesWhenDirectoryIsNotEmpty() {
+        List<String> expInclusionsNames = new ArrayList<>();
+        expInclusionsNames.add(TEST_EMPTY_DIR_NAME);
+        expInclusionsNames.add(TEST_XLS_FILE_NAME);
+        expInclusionsNames.add(TEST_XLSX_FILE_NAME);
         String currentDirPath = getTestDirAbsolutePath();
         
-        assertEquals(expDirsFilesNames, fileFinder.getFileNames(currentDirPath));
+        assertEquals(expInclusionsNames, fileFinder.getInclusionsNames(currentDirPath));
+    }
+    
+    @Test
+    void getInclusionsNamesShouldReturnEmptyListWhenDirectoryIsEmpty() {
+        String emptyDirPath = getTestDirAbsolutePath() + "\\" + TEST_EMPTY_DIR_NAME;
+        assertTrue(fileFinder.getInclusionsNames(emptyDirPath).isEmpty());
     }
     
     private String getTestDirAbsolutePath() {

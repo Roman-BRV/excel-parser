@@ -9,8 +9,8 @@ public class Table {
     private String filePath;
     private String tableName;
     private TableParsingCriteria tableParsingCriteria;
-    List<String> heads;
-    List<String> keys;
+    private List<String> heads;
+    private List<String> keys;
     private String[][] tableData;
 
     public Table() {
