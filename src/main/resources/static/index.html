@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+  <h3>Spring Boot</h3>
+  <br/>
+  <form action="/tableDescriptionConversation">
+    filePath: <input type="text" name="filePath" value="src-test-resources-test.xlsx"/><br/>
+    tableName: <input type="text" name="tableName" value="table"/><br/>
+    sheetNumber: <input type="text" name="sheetNumber" value="0"/><br/>
+    startRowNumber: <input type="text" name="startRowNumber" value="0"/><br/>
+    startColunmName: <input type="text" name="startColunmName" value="A"/><br/>
+    endRowNumber: <input type="text" name="endRowNumber" value="2"/><br/>
+    endColunmName: <input type="text" name="endColunmName" value="C"/><br/>
+    hasHeads: <input type="text" name="hasHeads" value="false"/><br/>
+    hasKeys: <input type="text" name="hasKeys" value="false"/><br/>
+    <input type="submit" value="GENERATE TABLE"/>
+  </form>
+
+</body>
+</html>

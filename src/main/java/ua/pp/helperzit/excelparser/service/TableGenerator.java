@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -16,31 +15,35 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import ua.pp.helperzit.excelparser.rest.TableDescriptionConversation;
 import ua.pp.helperzit.excelparser.service.models.Table;
 import ua.pp.helperzit.excelparser.service.models.TableDescription;
 import ua.pp.helperzit.excelparser.service.models.TableParsingCriteria;
-import ua.pp.helperzit.excelparser.ui.UIException;
-import ua.pp.helperzit.excelparser.ui.console.TableDescriptionConversation;
 
+@Service
 public class TableGenerator {
 
     private static final Logger log = LoggerFactory.getLogger(TableGenerator.class);
 
-    private TableDescriptionConversation tableDescriptionConversation = new TableDescriptionConversation();
+    @Autowired
+    private TableDescriptionConversation tableDescriptionConversation;
+    //private TableDescriptionConversation tableDescriptionConversation = new TableDescriptionConversation();
 
     public Table generateTable() throws ServiceException {
 
         log.debug("Going to generate table by user's description.");
 
         TableDescription tableDescription;
-        try {
+//        try {
             tableDescription = tableDescriptionConversation.askTableDescription();
             log.debug("{} has been successfully getted.", tableDescription);
-        } catch (UIException uiException) {
-            log.error("Conversation with user was failed with message: {}", uiException.getMessage(),  uiException);
-            throw new ServiceException("Something went wrong whit in UI layer.", uiException);
-        }
+//        } 
+//        catch (UIException uiException) {
+//            log.error("Conversation with user was failed with message: {}", uiException.getMessage(),  uiException);
+//            throw new ServiceException("Something went wrong whit in UI layer.", uiException);
+//        }
         String filePath = tableDescription.getFilePath();
         String tableName = tableDescription.getTableName();
 

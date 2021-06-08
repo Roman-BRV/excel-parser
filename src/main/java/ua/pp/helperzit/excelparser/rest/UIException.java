@@ -1,4 +1,4 @@
-package ua.pp.helperzit.excelparser.ui;
+package ua.pp.helperzit.excelparser.rest;
 
 public class UIException extends Exception {
 
