@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.pp.helperzit.excelparser.rest.TableDescriptionConversation;
+import ua.pp.helperzit.excelparser.rest.UIException;
 import ua.pp.helperzit.excelparser.service.models.Table;
 import ua.pp.helperzit.excelparser.service.models.TableDescription;
 import ua.pp.helperzit.excelparser.service.models.TableParsingCriteria;
@@ -36,14 +37,13 @@ public class TableGenerator {
         log.debug("Going to generate table by user's description.");
 
         TableDescription tableDescription;
-//        try {
+        try {
             tableDescription = tableDescriptionConversation.askTableDescription();
             log.debug("{} has been successfully getted.", tableDescription);
-//        } 
-//        catch (UIException uiException) {
-//            log.error("Conversation with user was failed with message: {}", uiException.getMessage(),  uiException);
-//            throw new ServiceException("Something went wrong whit in UI layer.", uiException);
-//        }
+        } catch (UIException uiException) {
+            log.error("Conversation with user was failed with message: {}", uiException.getMessage(),  uiException);
+            throw new ServiceException("Something went wrong whit in UI layer.", uiException);
+        }
         String filePath = tableDescription.getFilePath();
         String tableName = tableDescription.getTableName();
 

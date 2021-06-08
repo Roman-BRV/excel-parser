@@ -12,7 +12,7 @@ public class TableDescriptionConversation {
     this.tableDescription = tableDescription;
   }
 
-  public TableDescription askTableDescription() {
+  public TableDescription askTableDescription() throws UIException {
     return tableDescription;
   }
 
