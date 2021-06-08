@@ -73,31 +73,33 @@ public class TableGenerator {
             log.debug("Get Excel sheet number: {}.", (sheetNumber + 1));
 
             parseHeads(heads, sheet, hasHeads, startRowNumber, startColunmNumber, endColumnNumber);
+
+            int resultRowIndex = 0;
+            int currentRowIndex = startRowNumber;
             if(hasHeads) {
-                startRowNumber++;
+                currentRowIndex++;
             }
+            
+            for (; currentRowIndex <= endRowNumber; currentRowIndex++) {
 
-            int tmpRowIndex = 0;
-            for (int rowIndex = startRowNumber; rowIndex <= endRowNumber; rowIndex++) {
-
-                Row row = sheet.getRow(rowIndex);
-                setKeyIfDefault(keys, hasKeys, row, rowIndex);
+                Row row = sheet.getRow(currentRowIndex);
+                setKeyIfDefault(keys, hasKeys, row, currentRowIndex);
                 if(row == null) {
                     continue;
                 }
 
-                int tmpCellIndex = 0;
+                int resultCellIndex = 0;
 
                 for (int columnIndex = startColunmNumber; columnIndex <= endColumnNumber; columnIndex++) {
 
                     Cell cell = row.getCell(columnIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
-                    tableData[tmpRowIndex][tmpCellIndex] = geStringValue(cell);
+                    tableData[resultRowIndex][resultCellIndex] = geStringValue(cell);
                     if(columnIndex == keyColunmNumber) {
                         keys.add(geStringValue(cell));
                     }
-                    tmpCellIndex++;
+                    resultCellIndex++;
                 }
-                tmpRowIndex++;
+                resultRowIndex++;
 
             }
             log.debug("Propoused table area has been successfully parsed.");
