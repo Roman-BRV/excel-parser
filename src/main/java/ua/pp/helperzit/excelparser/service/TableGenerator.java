@@ -47,33 +47,36 @@ public class TableGenerator {
         String filePath = tableDescription.getFilePath();
         String tableName = tableDescription.getTableName();
 
-        TableParsingCriteria tableParsingCriteria = tableDescription.getTableParsingCriteria();
-        int sheetNumber = tableParsingCriteria.getSheetNumber();
-        int startRowNumber = tableParsingCriteria.getStartRowNumber();
-        int startColunmNumber = CellReference.convertColStringToIndex(tableParsingCriteria.getStartColunmName());
-        int endRowNumber = tableParsingCriteria.getEndRowNumber();
-        int endColumnNumber = CellReference.convertColStringToIndex(tableParsingCriteria.getEndColunmName());
-        boolean hasHeads = tableParsingCriteria.isHasHeads();
-        boolean hasKeys = tableParsingCriteria.isHasKeys();
-        int keyColunmNumber = CellReference.convertColStringToIndex(tableParsingCriteria.getKeyColunmName());
+        TableParsingCriteria criteria = tableDescription.getTableParsingCriteria();
+        //int sheetNumber = criteria.getSheetNumber();
+        //int startRowNumber = criteria.getStartRowNumber();
+        //int startColunmNumber = CellReference.convertColStringToIndex(criteria.getStartColunmName());
+        //int endRowNumber = criteria.getEndRowNumber();
+        //int endColumnNumber = CellReference.convertColStringToIndex(criteria.getEndColunmName());
+        //boolean hasHeads = criteria.isHasHeads();
+        //boolean hasKeys = criteria.isHasKeys();
+        //int keyColunmNumber = CellReference.convertColStringToIndex(criteria.getKeyColunmName());
 
         List<String> heads= new ArrayList<>();
         List<String> keys = new ArrayList<>();
-        int rowCount = endRowNumber - startRowNumber + 1;
-        if(hasHeads) {
+        
+        int rowCount = criteria.getEndRowNumber() - criteria.getStartRowNumber() + 1;
+        if(criteria.isHasHeads()) {
             rowCount--;
         }
-        int columnCount = endColumnNumber - startColunmNumber + 1;
+        int columnCount = CellReference.convertColStringToIndex(criteria.getEndColunmName()) - CellReference.convertColStringToIndex(criteria.getStartColunmName()) + 1;
         String[][] tableData = new String[rowCount][columnCount];
 
         log.debug("Start parsing Excel file: {}.", filePath);
         try (Workbook workbook = WorkbookFactory.create(new FileInputStream(filePath))) {
 
-            Sheet sheet = workbook.getSheetAt(sheetNumber);
-            log.debug("Get Excel sheet number: {}.", (sheetNumber + 1));
+            Sheet sheet = workbook.getSheetAt(criteria.getSheetNumber());
+            log.debug("Get Excel sheet number: {}.", (criteria.getSheetNumber() + 1));
 
-            parseHeads(heads, sheet, hasHeads, startRowNumber, startColunmNumber, endColumnNumber);
-            parseBody(tableData, keys, sheet, hasHeads, hasKeys, startRowNumber, endRowNumber, startColunmNumber, endColumnNumber, keyColunmNumber);
+            //parseHeads(heads, sheet, hasHeads, startRowNumber, startColunmNumber, endColumnNumber);
+            parseHeads(heads, sheet, criteria);
+            //parseBody(tableData, keys, sheet, hasHeads, hasKeys, startRowNumber, endRowNumber, startColunmNumber, endColumnNumber, keyColunmNumber);
+            parseBody(tableData, keys, sheet, criteria);
 
 //            int resultRowIndex = 0;
 //            int currentRowIndex = startRowNumber;
@@ -120,7 +123,7 @@ public class TableGenerator {
 
         table.setFilePath(filePath);
         table.setTableName(tableName);
-        table.setTableParsingCriteria(tableParsingCriteria);
+        table.setTableParsingCriteria(criteria);
         table.setHeads(heads);
         table.setKeys(keys);
         table.setTableData(tableData);
@@ -131,23 +134,24 @@ public class TableGenerator {
 
     }
 
-    private void parseHeads(List<String> heads, Sheet sheet, boolean hasHeads, int startRowNumber, int startColunmNumber, int endColunmNumber) throws ServiceException{
+    //private void parseHeads(List<String> heads, Sheet sheet, boolean hasHeads, int startRowNumber, int startColunmNumber, int endColunmNumber) throws ServiceException{
+    private void parseHeads(List<String> heads, Sheet sheet, TableParsingCriteria criteria) throws ServiceException{
 
         log.debug("Going to parse heads of columns in propoused table.");
 
-        if(!hasHeads) {
-            for (int colunmIndex = startColunmNumber; colunmIndex <= endColunmNumber; colunmIndex++) {
+        if(!criteria.isHasHeads()) {
+            for (int colunmIndex = CellReference.convertColStringToIndex(criteria.getStartColunmName()); colunmIndex <= CellReference.convertColStringToIndex(criteria.getEndColunmName()); colunmIndex++) {
                 heads.add("At column - " + CellReference.convertNumToColString(colunmIndex));
                 log.debug("Setted default heads of all columns.");
             }
         } else {
-            Row row = sheet.getRow(startRowNumber);
+            Row row = sheet.getRow(criteria.getStartRowNumber());
             if(row == null) {
-                log.error("Excel row number: {} is empty. Heads row cannot be empty!",(startRowNumber + 1));
-                throw new ServiceException("Excel row number: " + (startRowNumber + 1) + " is empty. Heads row cannot be empty!");
+                log.error("Excel row number: {} is empty. Heads row cannot be empty!",(criteria.getStartRowNumber() + 1));
+                throw new ServiceException("Excel row number: " + (criteria.getStartRowNumber() + 1) + " is empty. Heads row cannot be empty!");
             }
 
-            for (int columnIndex = startColunmNumber; columnIndex <= endColunmNumber; columnIndex++) {
+            for (int columnIndex = CellReference.convertColStringToIndex(criteria.getStartColunmName()); columnIndex <= CellReference.convertColStringToIndex(criteria.getEndColunmName()); columnIndex++) {
                 Cell cell = row.getCell(columnIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                 heads.add(geStringValue(cell));
             }
@@ -156,31 +160,32 @@ public class TableGenerator {
         log.debug("Heads of columns in propoused table has been successfully parsed.");
     }
     
-    private void parseBody(String[][] tableData, List<String> keys, Sheet sheet, boolean hasHeads, boolean hasKeys, int startRowNumber, int endRowNumber, int startColunmNumber, int endColumnNumber, int keyColunmNumber) {
+    //private void parseBody(String[][] tableData, List<String> keys, Sheet sheet, boolean hasHeads, boolean hasKeys, int startRowNumber, int endRowNumber, int startColunmNumber, int endColumnNumber, int keyColunmNumber) {
+    private void parseBody(String[][] tableData, List<String> keys, Sheet sheet, TableParsingCriteria criteria) {
         
         log.debug("Going to parse body of propoused table.");
         
         int resultRowIndex = 0;
-        int currentRowIndex = startRowNumber;
-        if(hasHeads) {
+        int currentRowIndex = criteria.getStartRowNumber();
+        if(criteria.isHasHeads()) {
             currentRowIndex++;
         }
         
-        for (; currentRowIndex <= endRowNumber; currentRowIndex++) {
+        for (; currentRowIndex <= criteria.getEndRowNumber(); currentRowIndex++) {
 
             Row row = sheet.getRow(currentRowIndex);
-            setKeyIfDefault(keys, hasKeys, row, currentRowIndex);
+            setKeyIfDefault(keys, criteria, row, currentRowIndex);
             if(row == null) {
                 continue;
             }
 
             int resultCellIndex = 0;
 
-            for (int columnIndex = startColunmNumber; columnIndex <= endColumnNumber; columnIndex++) {
+            for (int columnIndex = CellReference.convertColStringToIndex(criteria.getStartColunmName()); columnIndex <= CellReference.convertColStringToIndex(criteria.getEndColunmName()); columnIndex++) {
 
                 Cell cell = row.getCell(columnIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                 tableData[resultRowIndex][resultCellIndex] = geStringValue(cell);
-                if(columnIndex == keyColunmNumber) {
+                if(columnIndex == CellReference.convertColStringToIndex(criteria.getKeyColunmName())) {
                     keys.add(geStringValue(cell));
                 }
                 resultCellIndex++;
@@ -192,9 +197,9 @@ public class TableGenerator {
         log.debug("Body of propoused table has been successfully parsed.");
     }
 
-    private void setKeyIfDefault(List<String> keys, boolean hasKeys, Row row, int rowIndex){
+    private void setKeyIfDefault(List<String> keys, TableParsingCriteria criteria, Row row, int rowIndex){
 
-        if(!hasKeys) {
+        if(!criteria.isHasKeys()) {
             keys.add("At row - " + (rowIndex + 1));
         } else if(row == null) {
             keys.add("All row - " + (rowIndex + 1) + " empty.");
