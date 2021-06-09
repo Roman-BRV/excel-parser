@@ -73,35 +73,36 @@ public class TableGenerator {
             log.debug("Get Excel sheet number: {}.", (sheetNumber + 1));
 
             parseHeads(heads, sheet, hasHeads, startRowNumber, startColunmNumber, endColumnNumber);
+            parseBody(tableData, keys, sheet, hasHeads, hasKeys, startRowNumber, endRowNumber, startColunmNumber, endColumnNumber, keyColunmNumber);
 
-            int resultRowIndex = 0;
-            int currentRowIndex = startRowNumber;
-            if(hasHeads) {
-                currentRowIndex++;
-            }
-            
-            for (; currentRowIndex <= endRowNumber; currentRowIndex++) {
-
-                Row row = sheet.getRow(currentRowIndex);
-                setKeyIfDefault(keys, hasKeys, row, currentRowIndex);
-                if(row == null) {
-                    continue;
-                }
-
-                int resultCellIndex = 0;
-
-                for (int columnIndex = startColunmNumber; columnIndex <= endColumnNumber; columnIndex++) {
-
-                    Cell cell = row.getCell(columnIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
-                    tableData[resultRowIndex][resultCellIndex] = geStringValue(cell);
-                    if(columnIndex == keyColunmNumber) {
-                        keys.add(geStringValue(cell));
-                    }
-                    resultCellIndex++;
-                }
-                resultRowIndex++;
-
-            }
+//            int resultRowIndex = 0;
+//            int currentRowIndex = startRowNumber;
+//            if(hasHeads) {
+//                currentRowIndex++;
+//            }
+//            
+//            for (; currentRowIndex <= endRowNumber; currentRowIndex++) {
+//
+//                Row row = sheet.getRow(currentRowIndex);
+//                setKeyIfDefault(keys, hasKeys, row, currentRowIndex);
+//                if(row == null) {
+//                    continue;
+//                }
+//
+//                int resultCellIndex = 0;
+//
+//                for (int columnIndex = startColunmNumber; columnIndex <= endColumnNumber; columnIndex++) {
+//
+//                    Cell cell = row.getCell(columnIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+//                    tableData[resultRowIndex][resultCellIndex] = geStringValue(cell);
+//                    if(columnIndex == keyColunmNumber) {
+//                        keys.add(geStringValue(cell));
+//                    }
+//                    resultCellIndex++;
+//                }
+//                resultRowIndex++;
+//
+//            }
             log.debug("Propoused table area has been successfully parsed.");
 
         } catch (EncryptedDocumentException e) {
@@ -153,6 +154,42 @@ public class TableGenerator {
         }
 
         log.debug("Heads of columns in propoused table has been successfully parsed.");
+    }
+    
+    private void parseBody(String[][] tableData, List<String> keys, Sheet sheet, boolean hasHeads, boolean hasKeys, int startRowNumber, int endRowNumber, int startColunmNumber, int endColumnNumber, int keyColunmNumber) {
+        
+        log.debug("Going to parse body of propoused table.");
+        
+        int resultRowIndex = 0;
+        int currentRowIndex = startRowNumber;
+        if(hasHeads) {
+            currentRowIndex++;
+        }
+        
+        for (; currentRowIndex <= endRowNumber; currentRowIndex++) {
+
+            Row row = sheet.getRow(currentRowIndex);
+            setKeyIfDefault(keys, hasKeys, row, currentRowIndex);
+            if(row == null) {
+                continue;
+            }
+
+            int resultCellIndex = 0;
+
+            for (int columnIndex = startColunmNumber; columnIndex <= endColumnNumber; columnIndex++) {
+
+                Cell cell = row.getCell(columnIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                tableData[resultRowIndex][resultCellIndex] = geStringValue(cell);
+                if(columnIndex == keyColunmNumber) {
+                    keys.add(geStringValue(cell));
+                }
+                resultCellIndex++;
+            }
+            resultRowIndex++;
+
+        }
+        
+        log.debug("Body of propoused table has been successfully parsed.");
     }
 
     private void setKeyIfDefault(List<String> keys, boolean hasKeys, Row row, int rowIndex){
