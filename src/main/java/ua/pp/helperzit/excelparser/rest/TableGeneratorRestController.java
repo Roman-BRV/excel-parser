@@ -16,8 +16,6 @@ public class TableGeneratorRestController {
   
   @Autowired
   private TableGenerator tableGenerator;
-  @Autowired
-  private TableDescriptionConversation tableDescriptionConversation;
   
   @GetMapping(value = "tableDescriptionConversation")
   public void generateTable(
@@ -42,11 +40,11 @@ public class TableGeneratorRestController {
     tableParsingCriteria.setHasHeads(hasHeads);
     tableParsingCriteria.setHasKeys(hasKeys);
     
-    TableDescription tableDescription = new TableDescription(filePath.replace("-", "\\"), tableName, tableParsingCriteria);
+//    TableDescription tableDescription = new TableDescription(filePath.replace("-", "\\"), tableName, tableParsingCriteria);
+//    
+//    tableDescriptionConversation.setTableDescription(tableDescription);
     
-    tableDescriptionConversation.setTableDescription(tableDescription);
-    
-    tableGenerator.generateTable();
+    tableGenerator.generateTable(new TableDescription(filePath.replace("-", "\\"), tableName, tableParsingCriteria));
   }
 
 }

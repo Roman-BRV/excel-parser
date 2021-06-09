@@ -1,16 +1,9 @@
 package ua.pp.helperzit.excelparser.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
 import java.io.File;
 import java.util.Arrays;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import ua.pp.helperzit.excelparser.rest.TableDescriptionConversation;
 import ua.pp.helperzit.excelparser.rest.UIException;
 import ua.pp.helperzit.excelparser.service.models.Table;
 import ua.pp.helperzit.excelparser.service.models.TableDescription;
@@ -36,32 +29,32 @@ class TableGeneratorTest {
     private static final String[] TEST_KEYS = {"At row - 1", "At row - 2", "At row - 3"};
     private static final String[][] TEST_TABLE_DATA = {{"setted text", "", ""}, {"1.0", "2.0", "3.0"}, {null, null, null}};
     
-    @InjectMocks
+    //@InjectMocks
     TableGenerator tableGenerator = new TableGenerator();
-    
-    @Mock
-    TableDescriptionConversation mockTableDescriptionConversation;
+//    
+//    @Mock
+//    TableDescriptionConversation mockTableDescriptionConversation;
+//
+//    @BeforeEach
+//    void setUp() throws Exception {
+//        MockitoAnnotations.initMocks(this);
+//    }
 
-    @BeforeEach
-    void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-    }
-
-    @Test
-    void generateTableShouldThrowServiceExceptionWhenTableDescriptionConversationThrowUIException() throws ServiceException, UIException {
-        
-        when(mockTableDescriptionConversation.askTableDescription()).thenThrow(new UIException());
-        assertThrows(ServiceException.class, () -> tableGenerator.generateTable());
-    }
+//    @Test
+//    void generateTableShouldThrowServiceExceptionWhenTableDescriptionConversationThrowUIException() throws ServiceException, UIException {
+//        
+//        when(mockTableDescriptionConversation.askTableDescription()).thenThrow(new UIException());
+//        assertThrows(ServiceException.class, () -> tableGenerator.generateTable(testTableDescriptionConstruct()));
+//    }
     
     @Test
     void generateTableShouldReturnSuchTableWhenSuccessfullyParseExcelFile() throws ServiceException, UIException {
         
         Table expTable = expTableConstruct();
         
-        TableDescription testTableDescription = testTableDescriptionConstruct();
-        when(mockTableDescriptionConversation.askTableDescription()).thenReturn(testTableDescription);
-        Table resultTable = tableGenerator.generateTable();
+        //TableDescription testTableDescription = testTableDescriptionConstruct();
+        //when(mockTableDescriptionConversation.askTableDescription()).thenReturn(testTableDescription);
+        Table resultTable = tableGenerator.generateTable(testTableDescriptionConstruct());
         assertEquals(expTable, resultTable);
     }
     

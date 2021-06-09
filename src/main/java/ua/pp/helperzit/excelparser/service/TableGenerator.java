@@ -15,10 +15,10 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ua.pp.helperzit.excelparser.rest.TableDescriptionConversation;
-import ua.pp.helperzit.excelparser.rest.UIException;
+//import ua.pp.helperzit.excelparser.rest.TableDescriptionConversation;
+//import ua.pp.helperzit.excelparser.rest.UIException;
 import ua.pp.helperzit.excelparser.service.models.Table;
 import ua.pp.helperzit.excelparser.service.models.TableDescription;
 import ua.pp.helperzit.excelparser.service.models.TableParsingCriteria;
@@ -28,25 +28,24 @@ public class TableGenerator {
 
     private static final Logger log = LoggerFactory.getLogger(TableGenerator.class);
 
-    @Autowired
-    private TableDescriptionConversation tableDescriptionConversation;
+//    @Autowired
+//    private TableDescriptionConversation tableDescriptionConversation;
     //private TableDescriptionConversation tableDescriptionConversation = new TableDescriptionConversation();
 
-    public Table generateTable() throws ServiceException {
+    public Table generateTable(TableDescription tableDescription) throws ServiceException {
 
         log.debug("Going to generate table by user's description.");
 
-        TableDescription tableDescription;
-        try {
-            tableDescription = tableDescriptionConversation.askTableDescription();
-            log.debug("{} has been successfully getted.", tableDescription);
-        } catch (UIException uiException) {
-            log.error("Conversation with user was failed with message: {}", uiException.getMessage(),  uiException);
-            throw new ServiceException("Something went wrong whit in UI layer.", uiException);
-        }
+//        TableDescription tableDescription;
+//        try {
+//            tableDescription = tableDescriptionConversation.askTableDescription();
+//            log.debug("{} has been successfully getted.", tableDescription);
+//        } catch (UIException uiException) {
+//            log.error("Conversation with user was failed with message: {}", uiException.getMessage(),  uiException);
+//            throw new ServiceException("Something went wrong whit in UI layer.", uiException);
+//        }
         String filePath = tableDescription.getFilePath();
         String tableName = tableDescription.getTableName();
-
         TableParsingCriteria criteria = tableDescription.getTableParsingCriteria();
         //int sheetNumber = criteria.getSheetNumber();
         //int startRowNumber = criteria.getStartRowNumber();
