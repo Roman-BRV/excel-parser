@@ -15,10 +15,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-//import ua.pp.helperzit.excelparser.rest.TableDescriptionConversation;
-//import ua.pp.helperzit.excelparser.rest.UIException;
 import ua.pp.helperzit.excelparser.service.models.Table;
 import ua.pp.helperzit.excelparser.service.models.TableDescription;
 import ua.pp.helperzit.excelparser.service.models.TableParsingCriteria;
@@ -28,37 +25,17 @@ public class TableGenerator {
 
     private static final Logger log = LoggerFactory.getLogger(TableGenerator.class);
 
-//    @Autowired
-//    private TableDescriptionConversation tableDescriptionConversation;
-    //private TableDescriptionConversation tableDescriptionConversation = new TableDescriptionConversation();
-
     public Table generateTable(TableDescription tableDescription) throws ServiceException {
 
         log.debug("Going to generate table by user's description.");
 
-//        TableDescription tableDescription;
-//        try {
-//            tableDescription = tableDescriptionConversation.askTableDescription();
-//            log.debug("{} has been successfully getted.", tableDescription);
-//        } catch (UIException uiException) {
-//            log.error("Conversation with user was failed with message: {}", uiException.getMessage(),  uiException);
-//            throw new ServiceException("Something went wrong whit in UI layer.", uiException);
-//        }
         String filePath = tableDescription.getFilePath();
         String tableName = tableDescription.getTableName();
         TableParsingCriteria criteria = tableDescription.getTableParsingCriteria();
-        //int sheetNumber = criteria.getSheetNumber();
-        //int startRowNumber = criteria.getStartRowNumber();
-        //int startColunmNumber = CellReference.convertColStringToIndex(criteria.getStartColunmName());
-        //int endRowNumber = criteria.getEndRowNumber();
-        //int endColumnNumber = CellReference.convertColStringToIndex(criteria.getEndColunmName());
-        //boolean hasHeads = criteria.isHasHeads();
-        //boolean hasKeys = criteria.isHasKeys();
-        //int keyColunmNumber = CellReference.convertColStringToIndex(criteria.getKeyColunmName());
 
         List<String> heads= new ArrayList<>();
         List<String> keys = new ArrayList<>();
-        
+
         int rowCount = criteria.getEndRowNumber() - criteria.getStartRowNumber() + 1;
         if(criteria.isHasHeads()) {
             rowCount--;
@@ -72,39 +49,9 @@ public class TableGenerator {
             Sheet sheet = workbook.getSheetAt(criteria.getSheetNumber());
             log.debug("Get Excel sheet number: {}.", (criteria.getSheetNumber() + 1));
 
-            //parseHeads(heads, sheet, hasHeads, startRowNumber, startColunmNumber, endColumnNumber);
             parseHeads(heads, sheet, criteria);
-            //parseBody(tableData, keys, sheet, hasHeads, hasKeys, startRowNumber, endRowNumber, startColunmNumber, endColumnNumber, keyColunmNumber);
             parseBody(tableData, keys, sheet, criteria);
 
-//            int resultRowIndex = 0;
-//            int currentRowIndex = startRowNumber;
-//            if(hasHeads) {
-//                currentRowIndex++;
-//            }
-//            
-//            for (; currentRowIndex <= endRowNumber; currentRowIndex++) {
-//
-//                Row row = sheet.getRow(currentRowIndex);
-//                setKeyIfDefault(keys, hasKeys, row, currentRowIndex);
-//                if(row == null) {
-//                    continue;
-//                }
-//
-//                int resultCellIndex = 0;
-//
-//                for (int columnIndex = startColunmNumber; columnIndex <= endColumnNumber; columnIndex++) {
-//
-//                    Cell cell = row.getCell(columnIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
-//                    tableData[resultRowIndex][resultCellIndex] = geStringValue(cell);
-//                    if(columnIndex == keyColunmNumber) {
-//                        keys.add(geStringValue(cell));
-//                    }
-//                    resultCellIndex++;
-//                }
-//                resultRowIndex++;
-//
-//            }
             log.debug("Propoused table area has been successfully parsed.");
 
         } catch (EncryptedDocumentException e) {
@@ -133,7 +80,6 @@ public class TableGenerator {
 
     }
 
-    //private void parseHeads(List<String> heads, Sheet sheet, boolean hasHeads, int startRowNumber, int startColunmNumber, int endColunmNumber) throws ServiceException{
     private void parseHeads(List<String> heads, Sheet sheet, TableParsingCriteria criteria) throws ServiceException{
 
         log.debug("Going to parse heads of columns in propoused table.");
@@ -158,18 +104,17 @@ public class TableGenerator {
 
         log.debug("Heads of columns in propoused table has been successfully parsed.");
     }
-    
-    //private void parseBody(String[][] tableData, List<String> keys, Sheet sheet, boolean hasHeads, boolean hasKeys, int startRowNumber, int endRowNumber, int startColunmNumber, int endColumnNumber, int keyColunmNumber) {
+
     private void parseBody(String[][] tableData, List<String> keys, Sheet sheet, TableParsingCriteria criteria) {
-        
+
         log.debug("Going to parse body of propoused table.");
-        
+
         int resultRowIndex = 0;
         int currentRowIndex = criteria.getStartRowNumber();
         if(criteria.isHasHeads()) {
             currentRowIndex++;
         }
-        
+
         for (; currentRowIndex <= criteria.getEndRowNumber(); currentRowIndex++) {
 
             Row row = sheet.getRow(currentRowIndex);
@@ -192,7 +137,7 @@ public class TableGenerator {
             resultRowIndex++;
 
         }
-        
+
         log.debug("Body of propoused table has been successfully parsed.");
     }
 
@@ -212,27 +157,27 @@ public class TableGenerator {
         String result;
 
         switch (cell.getCellType()) {
-        case STRING:
-            result = cell.getRichStringCellValue().getString();
-            break;
-        case NUMERIC:
-            if (DateUtil.isCellDateFormatted(cell)) {
-                result = cell.getDateCellValue().toString();
-            } else {
-                result = Double.toString(cell.getNumericCellValue());
-            }
-            break;
-        case BOOLEAN:
-            result = Boolean.toString(cell.getBooleanCellValue());
-            break;
-        case FORMULA:
-            result = cell.getCellFormula();
-            break;
-        case BLANK:
-            result = "";
-            break;
-        default:
-            result = "";
+            case STRING:
+                result = cell.getRichStringCellValue().getString();
+                break;
+            case NUMERIC:
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    result = cell.getDateCellValue().toString();
+                } else {
+                    result = Double.toString(cell.getNumericCellValue());
+                }
+                break;
+            case BOOLEAN:
+                result = Boolean.toString(cell.getBooleanCellValue());
+                break;
+            case FORMULA:
+                result = cell.getCellFormula();
+                break;
+            case BLANK:
+                result = "";
+                break;
+            default:
+                result = "";
         }
 
         return result;

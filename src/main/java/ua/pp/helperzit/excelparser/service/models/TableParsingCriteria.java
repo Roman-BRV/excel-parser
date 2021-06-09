@@ -2,7 +2,7 @@ package ua.pp.helperzit.excelparser.service.models;
 
 public class TableParsingCriteria {
 
-    private static final String UNEXIST_KEY_COLUMN_NAME = "default";
+    private static final String DEFAULT_KEY_COLUMN_NAME = "default";
 
     private int sheetNumber;
     private int startRowNumber;
@@ -15,9 +15,7 @@ public class TableParsingCriteria {
 
     public TableParsingCriteria() {
 
-        if(!hasKeys) {
-            this.keyColunmName = UNEXIST_KEY_COLUMN_NAME;
-        }
+        this.keyColunmName = DEFAULT_KEY_COLUMN_NAME;
 
     }
 
@@ -110,38 +108,52 @@ public class TableParsingCriteria {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         TableParsingCriteria other = (TableParsingCriteria) obj;
         if (endColunmName == null) {
-            if (other.endColunmName != null)
+            if (other.endColunmName != null) {
                 return false;
-        } else if (!endColunmName.equals(other.endColunmName))
+            }
+        } else if (!endColunmName.equals(other.endColunmName)) {
             return false;
-        if (endRowNumber != other.endRowNumber)
+        }
+        if (endRowNumber != other.endRowNumber) {
             return false;
-        if (hasHeads != other.hasHeads)
+        }
+        if (hasHeads != other.hasHeads) {
             return false;
-        if (hasKeys != other.hasKeys)
+        }
+        if (hasKeys != other.hasKeys) {
             return false;
+        }
         if (keyColunmName == null) {
-            if (other.keyColunmName != null)
+            if (other.keyColunmName != null) {
                 return false;
-        } else if (!keyColunmName.equals(other.keyColunmName))
+            }
+        } else if (!keyColunmName.equals(other.keyColunmName)) {
             return false;
-        if (sheetNumber != other.sheetNumber)
+        }
+        if (sheetNumber != other.sheetNumber) {
             return false;
+        }
         if (startColunmName == null) {
-            if (other.startColunmName != null)
+            if (other.startColunmName != null) {
                 return false;
-        } else if (!startColunmName.equals(other.startColunmName))
+            }
+        } else if (!startColunmName.equals(other.startColunmName)) {
             return false;
-        if (startRowNumber != other.startRowNumber)
+        }
+        if (startRowNumber != other.startRowNumber) {
             return false;
+        }
         return true;
     }
 

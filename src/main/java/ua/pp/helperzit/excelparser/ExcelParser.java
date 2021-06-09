@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ExcelParser {
 
-  public static void main(String[] args) {
+    public static void main(String[] args) {
 
-    SpringApplication.run(ExcelParser.class, args);
+        SpringApplication.run(ExcelParser.class, args);
 
-  }
+    }
 
 }
