@@ -7,8 +7,9 @@
 <body>
   <h3>Spring Boot</h3>
   <br/>
-  <form action="/tableDescriptionConversation">
-    filePath: <input type="text" name="filePath" value="src-test-resources-test.xlsx"/><br/>
+  <form action="/tableDescriptionConversation" method="POST" enctype="multipart/form-data">
+    filePath: <input type="file" name="filePath"/><br/>
+    <!--  value="src-test-resources-test.xlsx" C:\java\repositories\personal\excel-parser\src\test\resources -->
     tableName: <input type="text" name="tableName" value="table"/><br/>
     sheetNumber: <input type="text" name="sheetNumber" value="0"/><br/>
     startRowNumber: <input type="text" name="startRowNumber" value="0"/><br/>

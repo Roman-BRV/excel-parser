@@ -5,7 +5,7 @@ import java.io.File;
 import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ua.pp.helperzit.excelparser.rest.UIException;
+import ua.pp.helperzit.excelparser.rest.RestException;
 import ua.pp.helperzit.excelparser.service.models.Table;
 import ua.pp.helperzit.excelparser.service.models.TableDescription;
 import ua.pp.helperzit.excelparser.service.models.TableParsingCriteria;
@@ -40,7 +40,7 @@ class TableGeneratorTest {
     }
 
     @Test
-    void generateTableShouldReturnSuchTableWhenSuccessfullyParseExcelFile() throws ServiceException, UIException {
+    void generateTableShouldReturnSuchTableWhenSuccessfullyParseExcelFile() throws ServiceException, RestException {
 
         Table expTable = expTableConstruct();
 

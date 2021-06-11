@@ -1,18 +1,18 @@
 package ua.pp.helperzit.excelparser.rest;
 
-public class UIException extends Exception {
+public class RestException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
-    public UIException() {
+    public RestException() {
         super();
     }
 
-    public UIException(String message) {
+    public RestException(String message) {
         super(message);
     }
 
-    public UIException(String message, Throwable cause) {
+    public RestException(String message, Throwable cause) {
         super(message, cause);
     }
 
