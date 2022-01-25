@@ -6,16 +6,16 @@ public class TableParsingCriteria {
 
     private int sheetNumber;
     private int startRowNumber;
-    private String startColunmName;
+    private String startColumnName;
     private int endRowNumber;
-    private String endColunmName;
+    private String endColumnName;
     private boolean hasHeads;
     private boolean hasKeys;
-    private String keyColunmName;
+    private String keyColumnName;
 
     public TableParsingCriteria() {
 
-        this.keyColunmName = DEFAULT_KEY_COLUMN_NAME;
+        this.keyColumnName = DEFAULT_KEY_COLUMN_NAME;
 
     }
 
@@ -27,16 +27,16 @@ public class TableParsingCriteria {
         return startRowNumber;
     }
 
-    public String getStartColunmName() {
-        return startColunmName;
+    public String getStartColumnName() {
+        return startColumnName;
     }
 
     public int getEndRowNumber() {
         return endRowNumber;
     }
 
-    public String getEndColunmName() {
-        return endColunmName;
+    public String getEndColumnName() {
+        return endColumnName;
     }
 
     public boolean isHasHeads() {
@@ -47,8 +47,8 @@ public class TableParsingCriteria {
         return hasKeys;
     }
 
-    public String getKeyColunmName() {
-        return keyColunmName;
+    public String getKeyColumnName() {
+        return keyColumnName;
     }
 
     public void setSheetNumber(int sheetNumber) {
@@ -59,16 +59,16 @@ public class TableParsingCriteria {
         this.startRowNumber = startRowNumber;
     }
 
-    public void setStartColunmName(String startColunmName) {
-        this.startColunmName = startColunmName;
+    public void setStartColumnName(String startColumnName) {
+        this.startColumnName = startColumnName;
     }
 
     public void setEndRowNumber(int endRowNumber) {
         this.endRowNumber = endRowNumber;
     }
 
-    public void setEndColunmName(String endColunmName) {
-        this.endColunmName = endColunmName;
+    public void setEndColumnName(String endColumnName) {
+        this.endColumnName = endColumnName;
     }
 
     public void setHasHeads(boolean hasHeads) {
@@ -79,15 +79,15 @@ public class TableParsingCriteria {
         this.hasKeys = hasKeys;
     }
 
-    public void setKeyColunmName(String keyColunmName) {
-        this.keyColunmName = keyColunmName;
+    public void setKeyColumnName(String keyColumnName) {
+        this.keyColumnName = keyColumnName;
     }
 
     @Override
     public String toString() {
         return "TableParsingCriteria [sheetNumber=" + sheetNumber + ", startRowNumber=" + startRowNumber
-                + ", startColunmName=" + startColunmName + ", endRowNumber=" + endRowNumber + ", endColunmName="
-                + endColunmName + ", hasHeads=" + hasHeads + ", hasKeys=" + hasKeys + ", keyColunmName=" + keyColunmName
+                + ", startColumnName=" + startColumnName + ", endRowNumber=" + endRowNumber + ", endColumnName="
+                + endColumnName + ", hasHeads=" + hasHeads + ", hasKeys=" + hasKeys + ", keyColumnName=" + keyColumnName
                 + "]";
     }
 
@@ -95,13 +95,13 @@ public class TableParsingCriteria {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((endColunmName == null) ? 0 : endColunmName.hashCode());
+        result = prime * result + ((endColumnName == null) ? 0 : endColumnName.hashCode());
         result = prime * result + endRowNumber;
         result = prime * result + (hasHeads ? 1231 : 1237);
         result = prime * result + (hasKeys ? 1231 : 1237);
-        result = prime * result + ((keyColunmName == null) ? 0 : keyColunmName.hashCode());
+        result = prime * result + ((keyColumnName == null) ? 0 : keyColumnName.hashCode());
         result = prime * result + sheetNumber;
-        result = prime * result + ((startColunmName == null) ? 0 : startColunmName.hashCode());
+        result = prime * result + ((startColumnName == null) ? 0 : startColumnName.hashCode());
         result = prime * result + startRowNumber;
         return result;
     }
@@ -118,11 +118,11 @@ public class TableParsingCriteria {
             return false;
         }
         TableParsingCriteria other = (TableParsingCriteria) obj;
-        if (endColunmName == null) {
-            if (other.endColunmName != null) {
+        if (endColumnName == null) {
+            if (other.endColumnName != null) {
                 return false;
             }
-        } else if (!endColunmName.equals(other.endColunmName)) {
+        } else if (!endColumnName.equals(other.endColumnName)) {
             return false;
         }
         if (endRowNumber != other.endRowNumber) {
@@ -134,21 +134,21 @@ public class TableParsingCriteria {
         if (hasKeys != other.hasKeys) {
             return false;
         }
-        if (keyColunmName == null) {
-            if (other.keyColunmName != null) {
+        if (keyColumnName == null) {
+            if (other.keyColumnName != null) {
                 return false;
             }
-        } else if (!keyColunmName.equals(other.keyColunmName)) {
+        } else if (!keyColumnName.equals(other.keyColumnName)) {
             return false;
         }
         if (sheetNumber != other.sheetNumber) {
             return false;
         }
-        if (startColunmName == null) {
-            if (other.startColunmName != null) {
+        if (startColumnName == null) {
+            if (other.startColumnName != null) {
                 return false;
             }
-        } else if (!startColunmName.equals(other.startColunmName)) {
+        } else if (!startColumnName.equals(other.startColumnName)) {
             return false;
         }
         if (startRowNumber != other.startRowNumber) {

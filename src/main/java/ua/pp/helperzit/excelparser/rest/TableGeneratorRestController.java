@@ -37,12 +37,12 @@ public class TableGeneratorRestController {
             @RequestParam("tableName") String tableName, //table
             @RequestParam("sheetNumber") int sheetNumber, //0
             @RequestParam("startRowNumber") int startRowNumber, //0
-            @RequestParam("startColunmName") String startColunmName, //A
+            @RequestParam("startColumnName") String startColumnName, //A
             @RequestParam("endRowNumber") int endRowNumber, //2
-            @RequestParam("endColunmName") String endColunmName, //C
+            @RequestParam("endColumnName") String endColumnName, //C
             @RequestParam("hasHeads") boolean hasHeads, //false
             @RequestParam("hasKeys") boolean hasKeys //false
-            //@RequestParam("keyColunmName") String keyColunmName
+            //@RequestParam("keyColumnName") String keyColumnName
             ) throws ServiceException, RestException {
 
         log.debug("Going to work with POST http request - /{}.", BASE_REQUEST_MAPPING);
@@ -56,7 +56,7 @@ public class TableGeneratorRestController {
             String location = this.getClass().getClassLoader().getResource("").getPath().replace("target/classes/","").substring(1);
             String uploadPath = location + "upload-files" + File.separator + fileName;
 
-            log.debug("Going to uploud file - {} to - {}.", fileName, uploadPath);
+            log.debug("Going to upload file - {} to - {}.", fileName, uploadPath);
 
             Files.copy(fileIS, Paths.get(uploadPath), StandardCopyOption.REPLACE_EXISTING);
 
@@ -65,9 +65,9 @@ public class TableGeneratorRestController {
             TableParsingCriteria tableParsingCriteria = new TableParsingCriteria();
             tableParsingCriteria.setSheetNumber(sheetNumber);
             tableParsingCriteria.setStartRowNumber(startRowNumber);
-            tableParsingCriteria.setStartColunmName(startColunmName);
+            tableParsingCriteria.setStartColumnName(startColumnName);
             tableParsingCriteria.setEndRowNumber(endRowNumber);
-            tableParsingCriteria.setEndColunmName(endColunmName);
+            tableParsingCriteria.setEndColumnName(endColumnName);
             tableParsingCriteria.setHasHeads(hasHeads);
             tableParsingCriteria.setHasKeys(hasKeys);
 

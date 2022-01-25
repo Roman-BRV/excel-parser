@@ -91,7 +91,7 @@
   <logger name="org" level="${org.log.level}">
   </logger>
   
-  <root level="${root.log.level}">
+  <root>
     <appender-ref ref="allActions" />
   </root>
   

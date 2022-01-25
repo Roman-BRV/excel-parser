@@ -2,7 +2,6 @@ package ua.pp.helperzit.excelparser.service;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,25 +42,27 @@ public class FileFinder {
 
     public List<String> getInclusionsNames(String path){
 
-        log.debug("Going to get names of incledes in directory: {}.", path);
+        log.debug("Going to get names of includes in directory: {}.", path);
 
         List<String> inclusionsNames = new ArrayList<>();
         List<String> dirNames = new ArrayList<>();
         List<String> fileNames = new ArrayList<>();
 
         File dir = new File(path);
-        List<File> files = Arrays.asList(dir.listFiles());
-        for (File file : files) {
-            if(file.isDirectory()) {
-                dirNames.add(file.getName());
-            } else {
-                fileNames.add(file.getName());
+        File[] files = dir.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if(file.isDirectory()) {
+                    dirNames.add(file.getName());
+                } else {
+                    fileNames.add(file.getName());
+                }
             }
         }
         inclusionsNames.addAll(dirNames.stream().sorted().collect(Collectors.toList()));
         inclusionsNames.addAll(fileNames.stream().sorted().collect(Collectors.toList()));
 
-        log.debug("Names of incledes in directory: {} have been successfully getted.", path);
+        log.debug("Names of includes in directory: {} have been successfully got.", path);
 
         return inclusionsNames;
     }

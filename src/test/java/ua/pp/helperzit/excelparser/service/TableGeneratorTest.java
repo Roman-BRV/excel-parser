@@ -1,14 +1,15 @@
 package ua.pp.helperzit.excelparser.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import java.io.File;
-import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ua.pp.helperzit.excelparser.rest.RestException;
 import ua.pp.helperzit.excelparser.service.models.Table;
 import ua.pp.helperzit.excelparser.service.models.TableDescription;
 import ua.pp.helperzit.excelparser.service.models.TableParsingCriteria;
+
+import java.io.File;
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TableGeneratorTest {
 
@@ -28,19 +29,19 @@ class TableGeneratorTest {
 
     private static final String[] TEST_HEADS = {"At column - A", "At column - B", "At column - C"};
     private static final String[] TEST_KEYS = {"At row - 1", "At row - 2", "At row - 3"};
-    private static final String[][] TEST_TABLE_DATA = {{"setted text", "", ""}, {"1.0", "2.0", "3.0"}, {null, null, null}};
+    private static final String[][] TEST_TABLE_DATA = {{"set text", "", ""}, {"1.0", "2.0", "3.0"}, {null, null, null}};
 
 
     TableGenerator tableGenerator;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
 
         tableGenerator = new TableGenerator();
     }
 
     @Test
-    void generateTableShouldReturnSuchTableWhenSuccessfullyParseExcelFile() throws ServiceException, RestException {
+    void generateTableShouldReturnSuchTableWhenSuccessfullyParseExcelFile() throws ServiceException {
 
         Table expTable = expTableConstruct();
 
@@ -70,12 +71,12 @@ class TableGeneratorTest {
         TableParsingCriteria tableParsingCriteria = new TableParsingCriteria();
         tableParsingCriteria.setSheetNumber(TEST_SHEET_NUMBER);
         tableParsingCriteria.setStartRowNumber(TEST_START_ROW_NUMBER);
-        tableParsingCriteria.setStartColunmName(TEST_START_COLUMN_NAME);
+        tableParsingCriteria.setStartColumnName(TEST_START_COLUMN_NAME);
         tableParsingCriteria.setEndRowNumber(TEST_END_ROW_NUMBER);
-        tableParsingCriteria.setEndColunmName(TEST_END_COLUMN_NAME);
+        tableParsingCriteria.setEndColumnName(TEST_END_COLUMN_NAME);
         tableParsingCriteria.setHasHeads(TEST_HAS_HEADS);
         tableParsingCriteria.setHasKeys(TEST_HAS_KEYS);
-        tableParsingCriteria.setKeyColunmName(DEFAULT_KEY_COLUMN_NAME);
+        tableParsingCriteria.setKeyColumnName(DEFAULT_KEY_COLUMN_NAME);
 
         return tableParsingCriteria;
     }
