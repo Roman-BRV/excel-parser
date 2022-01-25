@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="ISO-8859-1">
+<title>Create new user</title>
+</head>
+<body>
+  <form action="#" data-th-action="@{/users/new}" data-th-object="${user}" method="post">
+    <label for="name">Name</label>
+    <input type="text" data-th-field="*{name}" id="name" placeholder="Name">
+    <span data-th-if="${#fields.hasErrors('name')}" data-th-errors="*{name}"></span>
+    <label for="email">Email</label>
+    <input type="text" data-th-field="*{email}" id="email" placeholder="Email">
+    <span data-th-if="${#fields.hasErrors('email')}" data-th-errors="*{email}"></span>
+    <input type="submit" value="Add User">   
+  </form>
+
+</body>
+</html>
